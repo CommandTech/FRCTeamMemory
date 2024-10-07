@@ -44,61 +44,108 @@ districtKeys = [f"{datetime.now().year}fim", f"{datetime.now().year}ne",f"{datet
 
 def genRandomTeam():
     with app.app_context():
-        print('length: ' + str(len(session.get('selected_regions',[]))))
-        session['chioices'] = 0
-        if session.get('selected_regions',[]):
-            session['chioices'] += len(session.get('selected_regions',[]))
-        if session.get('regional', False):
-            session['chioices'] += 1
-        print(session.get('chioices', 0))
-        
         team_choices = {
-            0: regionalTeams,
+            0: chsTeams,
             1: fimTeams,
-            2: neTeams,
-            3: pnwTeams,
-            4: ontTeams,
-            5: chsTeams,
-            6: finTeams,
-            7: fncTeams,
-            8: pchTeams,
-            9: fitTeams,
-            10: fmaTeams,
-            11: isrTeams,
-            12: fscTeams
+            2: fitTeams,
+            3: finTeams,
+            4: isrTeams,
+            5: fmaTeams,
+            6: fncTeams,
+            7: fscTeams,
+            8: neTeams,
+            9: ontTeams,
+            10: pnwTeams,
+            11: pchTeams
         }
 
         try:
-            session['choice'] = random.randrange(0, session.get('choices', 0))
-            team_list = team_choices.get(session['choice'], [])
+            if session['regional'] and session['selected_regions'] == []:
+                team_list = regionalTeams
+            elif random.choice([True, False]) and session.get('regional'):
+                #regional
+                team_list = regionalTeams
+            else:
+                #district
+                while True:
+                    session['choice'] = random.randrange(0, 11)
+                    temp = ''
+                    match (session['choice']):
+                        case 0:
+                            temp = 'chesapeake'
+                            pass
+                        case 1:
+                            temp = 'michigan'
+                            pass
+                        case 2:
+                            temp = 'texas'
+                            pass
+                        case 3:
+                            temp = 'indiana'
+                            pass
+                        case 4:
+                            temp = 'isreal'
+                            pass
+                        case 5:
+                            temp = 'mid-atlantic'
+                            pass
+                        case 6:
+                            temp = 'northcarolina'
+                            pass
+                        case 7:
+                            temp = 'southcarolina'
+                            pass
+                        case 8:
+                            temp = 'newengland'
+                            pass
+                        case 9:
+                            temp = 'ontario'
+                            pass
+                        case 10:
+                            temp = 'pacificnorthwest'
+                            pass
+                        case 11:
+                            temp = 'peachtree'
+                            pass
+
+                    if temp in session.get('selected_regions', []):
+                        break
+                    elif session['selected_regions'] == []:
+                        break
+                
+                if session['selected_regions'] == []:
+                    session['curTeam'] = -1
+                    session['curTeamName'] = "No Teams Loaded"
+                    team_list = []
+                else:
+                    team_list = team_choices.get(session['choice'], [])
 
             if team_list:
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
                 session['curTeamName'] = team[1]
         except:
-                session['curTeam'] = -1
-                session['curTeamName'] = "No Teams Loaded"
+            session['curTeam'] = -1
+            session['curTeamName'] = "No Teams Loaded"
         
         
 
 @app.route('/')
 def root():
     with app.app_context():
-        print("\n\n\n\n\n\n")
-        session['dark_mode'] = False
-        session['authenticated'] = False
+        if 'dark_mode' not in session:
+            session['dark_mode'] = False
         
-        session['chioices'] = 0
-        session['teams'] = []
         session['curTeam'] = 0
         session['curTeamName'] = "Teams Not Loaded Yet"
-        session['selected_regions'] = []
-        session['active'] = []
-        session['inactive'] = []
-        session['regional'] = []
+
+        if 'selected_regions' not in session:
+            session['selected_regions'] = ['chesapeake', 'michigan', 'texas', 'indiana', 'isreal', 'mid-atlantic', 'northcarolina', 'newengland', 'ontario', 'pacificnorthwest', 'peachtree']
+        if 'regional' not in session:
+            session['regional'] = True
+        
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session.get('curTeamName', "Teams Not Loaded Yet"))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False))
 
 @app.route('/check-team', methods=['POST'])
 def check_team():
@@ -171,8 +218,6 @@ def getTeams():
 def update_teams():
     data = request.get_json()
     session['selected_regions'] = data['regions']
-    session['active'] = data['active']
-    session['inactive'] = data['inactive']
     session['regional'] = data['regional']
     genRandomTeam()
     return "0"
@@ -180,7 +225,7 @@ def update_teams():
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    return jsonify({'status': 'success', 'newTeam': session['curTeam']})
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName']})
 
 def startWeb():
     app.run(host='0.0.0.0', port=80)

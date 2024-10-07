@@ -3,13 +3,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const textBox = document.getElementById('team-input');
     const teamName = document.getElementById('team-name');
 
-    const activeCheckbox = document.getElementById('active');
-    const inactiveCheckbox = document.getElementById('inactive');
     const regionalCheckbox = document.getElementById('regional');
     const districtCheckbox = document.getElementById('district');
     const regionCheckboxes = document.querySelectorAll('#chesapeake, #michigan, #texas, #indiana, #isreal, #mid-atlantic, #northcarolina, #newengland, #ontario, #pacificnorthwest, #peachtree');
 
+    let isSubmitting = false;
+
     function submitForm() {
+        if (isSubmitting) return;
+
+        isSubmitting = true;
         const teamNumber = textBox.value;
 
         fetch('/check-team', {
@@ -39,6 +42,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 // Update the team name and reset its color
                 teamName.textContent = data.newTeamName;
                 teamName.style.color = 'black';
+
+                isSubmitting = false;
             }, 2000); // 2000 milliseconds = 2 seconds
         });
     }
@@ -55,8 +60,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             },
             body: JSON.stringify({
                 regions: selectedRegions,
-                active: activeCheckbox.checked,
-                inactive: inactiveCheckbox.checked,
                 regional: regionalCheckbox.checked
             })
         })
@@ -74,12 +77,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    activeCheckbox.addEventListener('change', () => {
-        updateTeams();
-    });
-    inactiveCheckbox.addEventListener('change', () => {
-        updateTeams();
-    });
     regionalCheckbox.addEventListener('change', () => {
         updateTeams();
     });
@@ -113,8 +110,14 @@ function reloadPage() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            document.getElementById('team-input').value = data.newTeam;
+            const teamName = document.getElementById('team-name');
+            teamName.textContent = data.newTeamName;
         }
     })
     .catch(error => console.error('Error:', error));
 }
+
+document.getElementById('darkModeSwitch').addEventListener('change', function() {
+    fetch('/dark-mode');
+    document.body.classList.toggle('dark-mode');
+});

@@ -7,41 +7,39 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body class="{{ 'dark-mode' if dark_mode else '' }}">
-    <!-- <div class="switch-container">
+    <div class="switch-container">
         <label class="switch">
             <input type="checkbox" id="darkModeSwitch" {{ 'checked' if dark_mode else '' }}>
             <span class="slider round"></span>
         </label>
-    </div> -->
+    </div>
 
     <div class="main-container">
         <div class="sidebar">
-            <h2>Options</h2>
-            <label><input type="checkbox" id="active" checked> Active Teams</label><br>
-            <label><input type="checkbox" id="inactive" checked> Inactive Teams</label><br>
             <h2>Region Specific</h2>
-            <label><input type="checkbox" id="regional" checked> Regional Teams</label><br>
-            <label><input type="checkbox" id="district" checked> District Teams</label><br>
-            <label><input type="checkbox" id="chesapeake" checked> FIRST Chesapeake</label><br>
-            <label><input type="checkbox" id="michigan" checked> FIRST In Michigan</label><br>
-            <label><input type="checkbox" id="texas" checked> FIRST In Texas</label><br>
-            <label><input type="checkbox" id="indiana" checked> FIRST Indiana Robotics</label><br>
-            <label><input type="checkbox" id="isreal" checked> FIRST Isreal</label><br>
-            <label><input type="checkbox" id="mid-atlantic" checked> FIRST Mid-Atlantic</label><br>
-            <label><input type="checkbox" id="northcarolina" checked> FIRST North Carolina</label><br>
-            <label><input type="checkbox" id="southcarolina"> <s>FIRST South Carolina</s></label><br>
-            <label><input type="checkbox" id="newengland" checked> New England</label><br>
-            <label><input type="checkbox" id="ontario" checked> Ontario</label><br>
-            <label><input type="checkbox" id="pacificnorthwest" checked> Pacific Northwest</label><br>
-            <label><input type="checkbox" id="peachtree" checked> Peachtree</label><br>
+            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            <label><input type="checkbox" id="district" {% if selected_regions %}checked{% endif %}> District Teams</label><br>
+            <label><input type="checkbox" id="chesapeake" {% if 'chesapeake' in selected_regions %}checked{% endif %}> FIRST Chesapeake</label><br>
+            <label><input type="checkbox" id="michigan" {% if 'michigan' in selected_regions %}checked{% endif %}> FIRST In Michigan</label><br>
+            <label><input type="checkbox" id="texas" {% if 'texas' in selected_regions %}checked{% endif %}> FIRST In Texas</label><br>
+            <label><input type="checkbox" id="indiana" {% if 'indiana' in selected_regions %}checked{% endif %}> FIRST Indiana Robotics</label><br>
+            <label><input type="checkbox" id="isreal" {% if 'isreal' in selected_regions %}checked{% endif %}> FIRST Isreal</label><br>
+            <label><input type="checkbox" id="mid-atlantic" {% if 'mid-atlantic' in selected_regions %}checked{% endif %}> FIRST Mid-Atlantic</label><br>
+            <label><input type="checkbox" id="northcarolina" {% if 'northcarolina' in selected_regions %}checked{% endif %}> FIRST North Carolina</label><br>
+            <label><input type="checkbox" id="southcarolina"{% if 'southcarolina' in selected_regions %}checked{% endif %}> <s>FIRST South Carolina</s></label><br>
+            <label><input type="checkbox" id="newengland" {% if 'newengland' in selected_regions %}checked{% endif %}> New England</label><br>
+            <label><input type="checkbox" id="ontario" {% if 'ontario' in selected_regions %}checked{% endif %}> Ontario</label><br>
+            <label><input type="checkbox" id="pacificnorthwest" {% if 'pacificnorthwest' in selected_regions %}checked{% endif %}> Pacific Northwest</label><br>
+            <label><input type="checkbox" id="peachtree" {% if 'peachtree' in selected_regions %}checked{% endif %}> Peachtree</label><br>
         </div>
+
 
         <div class="form-container" id="first-page">
             <h1 id="team-name">{{team}}</h1>
             <div class="centered-content">
-                <input type="text" id="team-input" placeholder="Loading teams" maxlength="5" pattern=".{0,5}">
+                <input type="text" id="team-input" placeholder="12345" maxlength="5" pattern=".{0,5}">
                 <button type="submit" id="submit-button">Submit</button>
-                <button onclick="reloadPage()">Reload Team</button>
+                <button id='reload' onclick="reloadPage()">Refresh Teams</button>
             </div>
         </div>
     </div>
