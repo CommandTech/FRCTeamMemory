@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRC Memory</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="{{ 'dark-mode' if dark_mode else '' }}">
+    <!-- <div class="switch-container">
+        <label class="switch">
+            <input type="checkbox" id="darkModeSwitch" {{ 'checked' if dark_mode else '' }}>
+            <span class="slider round"></span>
+        </label>
+    </div> -->
+
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>Options</h2>
+            <label><input type="checkbox" id="active" checked> Active Teams</label><br>
+            <label><input type="checkbox" id="inactive" checked> Inactive Teams</label><br>
+            <h2>Region Specific</h2>
+            <label><input type="checkbox" id="regional" checked> Regional Teams</label><br>
+            <label><input type="checkbox" id="district" checked> District Teams</label><br>
+            <label><input type="checkbox" id="chesapeake" checked> FIRST Chesapeake</label><br>
+            <label><input type="checkbox" id="michigan" checked> FIRST In Michigan</label><br>
+            <label><input type="checkbox" id="texas" checked> FIRST In Texas</label><br>
+            <label><input type="checkbox" id="indiana" checked> FIRST Indiana Robotics</label><br>
+            <label><input type="checkbox" id="isreal" checked> FIRST Isreal</label><br>
+            <label><input type="checkbox" id="mid-atlantic" checked> FIRST Mid-Atlantic</label><br>
+            <label><input type="checkbox" id="northcarolina" checked> FIRST North Carolina</label><br>
+            <label><input type="checkbox" id="southcarolina"> <s>FIRST South Carolina</s></label><br>
+            <label><input type="checkbox" id="newengland" checked> New England</label><br>
+            <label><input type="checkbox" id="ontario" checked> Ontario</label><br>
+            <label><input type="checkbox" id="pacificnorthwest" checked> Pacific Northwest</label><br>
+            <label><input type="checkbox" id="peachtree" checked> Peachtree</label><br>
+        </div>
+
+        <div class="form-container" id="first-page">
+            <h1 id="team-name">{{team}}</h1>
+            <div class="centered-content">
+                <input type="text" id="team-input" placeholder="Loading teams" maxlength="5" pattern=".{0,5}">
+                <button type="submit" id="submit-button">Submit</button>
+                <button onclick="reloadPage()">Reload Team</button>
+            </div>
+        </div>
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
