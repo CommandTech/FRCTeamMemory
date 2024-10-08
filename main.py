@@ -228,7 +228,7 @@ def gen_random_team_route():
     return jsonify({'status': 'success', 'newTeamName': session['curTeamName']})
 
 def startWeb():
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=81)
 
 
 if __name__ == '__main__':

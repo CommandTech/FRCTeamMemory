@@ -83,7 +83,7 @@ body.dark-mode button {
 body.dark-mode .main-container,
 body.dark-mode .form-container,
 body.dark-mode .sidebar,
-body.dark-mode #team-name {
+body.dark-mode .team-name {
     background-color: #1d1d1d; /* Black */
     color: #fff; /* White */
 }
