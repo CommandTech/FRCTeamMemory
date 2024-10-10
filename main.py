@@ -123,8 +123,6 @@ def genRandomTeam():
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
                 session['curTeamName'] = team[1]
-                print(team[2].split(", ")[0])
-                print(team[2].split(", ")[1])
                 session['curTeamCity'] = team[2].split(", ")[0]
                 session['curTeamState'] = team[2].split(", ")[1]
         except:
