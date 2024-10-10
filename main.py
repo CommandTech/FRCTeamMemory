@@ -124,9 +124,15 @@ def genRandomTeam():
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
                 session['curTeamName'] = team[1]
+                print(team[2].split(", ")[0])
+                print(team[2].split(", ")[1])
+                session['curTeamCity'] = team[2].split(", ")[0]
+                session['curTeamState'] = team[2].split(", ")[1]
         except:
             session['curTeam'] = -1
             session['curTeamName'] = "No Teams Loaded"
+            session['curTeamCity'] = "No City"
+            session['curTeamState'] = "No State"
         
         
 
@@ -139,13 +145,16 @@ def root():
         session['curTeam'] = 0
         session['curTeamName'] = "Teams Not Loaded Yet"
 
+        session['curTeamCity'] = "No City"
+        session['curTeamState'] = "No State"
+
         if 'selected_regions' not in session:
             session['selected_regions'] = ['chesapeake', 'michigan', 'texas', 'indiana', 'isreal', 'mid-atlantic', 'northcarolina', 'newengland', 'ontario', 'pacificnorthwest', 'peachtree']
         if 'regional' not in session:
             session['regional'] = True
         
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False), city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"))
 
 @app.route('/check-team', methods=['POST'])
 def check_team():
@@ -185,7 +194,7 @@ def getTeams():
             data = response.json()
             if data:
                 for team in data:
-                    curTeam = [team['team_number'], team['nickname']]
+                    curTeam = [team['team_number'], team['nickname'], team['city'] + ", " + team['state_prov']]
                     team_list.append(curTeam)
 
     urls = [
@@ -225,7 +234,7 @@ def update_teams():
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    return jsonify({'status': 'success', 'newTeamName': session['curTeamName']})
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState']})
 
 def startWeb():
     app.run(host='0.0.0.0', port=81)

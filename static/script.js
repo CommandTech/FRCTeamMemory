@@ -111,7 +111,9 @@ function reloadPage() {
     .then(data => {
         if (data.status === 'success') {
             const teamName = document.getElementById('team-name');
+            const teamLocation = document.getElementById('team-location');
             teamName.textContent = data.newTeamName;
+            teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState;
         }
     })
     .catch(error => console.error('Error:', error));
