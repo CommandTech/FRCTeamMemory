@@ -1,12 +1,13 @@
+const submitButton = document.getElementById('submit-button');
+const textBox = document.getElementById('team-input');
+const teamName = document.getElementById('team-name');
+const teamLocation = document.getElementById('team-location');
+
+const regionalCheckbox = document.getElementById('regional');
+const districtCheckbox = document.getElementById('district');
+const regionCheckboxes = document.querySelectorAll('#chesapeake, #michigan, #texas, #indiana, #isreal, #mid-atlantic, #northcarolina, #newengland, #ontario, #pacificnorthwest, #peachtree');
+
 document.addEventListener('DOMContentLoaded', (event) => {
-    const submitButton = document.getElementById('submit-button');
-    const textBox = document.getElementById('team-input');
-    const teamName = document.getElementById('team-name');
-
-    const regionalCheckbox = document.getElementById('regional');
-    const districtCheckbox = document.getElementById('district');
-    const regionCheckboxes = document.querySelectorAll('#chesapeake, #michigan, #texas, #indiana, #isreal, #mid-atlantic, #northcarolina, #newengland, #ontario, #pacificnorthwest, #peachtree');
-
     let isSubmitting = false;
 
     function submitForm() {
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
         .then(response => response.json())
         .then(data => {
+            const prevColor = teamName.style.color;
             if (data.match) {
                 textBox.style.color = 'green';
                 teamName.style.color = 'green';
@@ -37,11 +39,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             setTimeout(() => {
                 // Reset the text box color and value
                 textBox.value = '';
-                textBox.style.color = 'black';
+                textBox.style.color = prevColor;
 
                 // Update the team name and reset its color
                 teamName.textContent = data.newTeamName;
-                teamName.style.color = 'black';
+                teamName.style.color = prevColor;
+
+                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState;
 
                 isSubmitting = false;
             }, 2000); // 2000 milliseconds = 2 seconds
@@ -110,8 +114,6 @@ function reloadPage() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            const teamName = document.getElementById('team-name');
-            const teamLocation = document.getElementById('team-location');
             teamName.textContent = data.newTeamName;
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState;
         }

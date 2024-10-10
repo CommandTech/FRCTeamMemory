@@ -1,6 +1,5 @@
 import requests
-from flask import Flask, jsonify, session, redirect, url_for, request, render_template, send_from_directory
-import threading
+from flask import Flask, jsonify, session, request, render_template, send_from_directory
 import concurrent.futures
 import random
 from datetime import datetime
@@ -168,7 +167,7 @@ def check_team():
         match = teamNumber == session.get('curTeam',0)
         correctTeamNumber = session.get('curTeam',0)
         genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet")})
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State")})
 
 @app.route('/script.js')
 def script():
