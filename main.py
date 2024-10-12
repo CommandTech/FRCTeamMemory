@@ -14,28 +14,117 @@ frcTeams = []
 
 regionalTeams = []
 
+alTeams = []
+akTeams = []
+azTeams = []
+arTeams = []
+caTeams = []
+coTeams = []
+flTeams = []
+hiTeams = []
+idTeams = []
+ilTeams = []
+iaTeams = []
+ksTeams = []
+kyTeams = []
+laTeams = []
+mnTeams = []
+msTeams = []
+moTeams = []
+mtTeams = []
+RneTeams = []
+nvTeams = []
+nmTeams = []
+nyTeams = []
+ndTeams = []
+ohTeams = []
+okTeams = []
+paTeams = []
+sdTeams = []
+tnTeams = []
+utTeams = []
+wvTeams = []
+wiTeams = []
+wyTeams = []
+prTeams = []
+guTeams = []
+otherTeams = [] #9009
+
+ausTeams = [] #Australia
+braTeams = [] #Brazil
+canTeams = [] #Canada
+chiTeams = [] #China
+japTeams = [] #Japan
+mexTeams = [] #Mexico
+turTeams = [] #Türkiye
+ukTeams = [] #United Kingdom
+netTeams = [] #Netherlands
+taiTeams = [] #Chinese Taipei
+polTeams = [] #Poland
+bulTeams = [] #Bulgaria
+greTeams = [] #Greece
+domTeams = [] #Dominican Republic
+indTeams = [] #India
+argTeams = [] #Argentina
+romTeams = [] #Romania
+azeTeams = [] #Azerbaijan
+sweTeams = [] #Sweden
+fraTeams = [] #France
+botTeams = [] #Botswana
+ecuTeams = [] #Ecuador
+surTeams = [] #Suriname
+serTeams = [] #Serbia
+comTeams = [] #Comoros
+pakTeams = [] #Pakistan
+ukrTeams = [] #Ukraine
+phiTeams = [] #Philippines
+gamTeams = [] #Gambia
+czeTeams = [] #Czech Republic
+micTeams = [] #Micronesia
+kazTeams = [] #Kazakhstan
+manTeams = [] #Manisia
+belTeams = [] #Belize
+colTeams = [] #Columbia
+croTeams = [] #Croatia
+zelTeams = [] #New Zealand
+afgTeams = [] #Afghanistan
+bosTeams = [] #Bosnia and Herzegovina
+norTeams = [] #Norway
+itaTeams = [] #Italy
+denTeams = [] #Denmark
+swiTeams = [] #Switzerland
+gerTeams = [] #Germany
+sinTeams = [] #Singapore
+chiTeams = [] #Chile
+libTeams = [] #Libya
+uaeTeams = [] #United Arab Emirates
+safTeams = [] #South Africa
+armTeams = [] #Armenia
+venTeams = [] #Venezuela
+vieTeams = [] #Vietnam
+zimTeams = [] #Zimbabwe
+morTeams = [] #Morocco
+tonTeams = [] #Tonga
+inoTeams = [] #Indonesia
+ethTeams = [] #Ethiopia
+parTeams = [] #Paraguay
+panTeams = [] #Panama
+parTeams = [] #Paraguay
+lesTeams = [] #Lesotho
+barTeams = [] #Barbados
+sokTeams = [] #South Korea
+
 fimTeams = []
-
 neTeams = []
-
 pnwTeams = []
-
 ontTeams = []
-
 chsTeams = []
-
 finTeams = []
-
 fncTeams = []
-
 pchTeams = []
-
 fitTeams = []
-
 fmaTeams = []
-
 isrTeams = []
-
 fscTeams = []
 
 districtKeys = [f"{datetime.now().year}fim", f"{datetime.now().year}ne",f"{datetime.now().year}pnw", f"{datetime.now().year}ont", f"{datetime.now().year}chs", f"{datetime.now().year}fin",f"{datetime.now().year}fnc",f"{datetime.now().year}pch", f"{datetime.now().year}fit",
@@ -58,9 +147,116 @@ def genRandomTeam():
             11: pchTeams
         }
 
+        regional_choices = {
+            0: alTeams,
+            1: akTeams,
+            2: azTeams,
+            3: arTeams,
+            4: caTeams,
+            5: coTeams,
+            6: flTeams,
+            7: hiTeams,
+            8: idTeams,
+            9: ilTeams,
+            10: iaTeams,
+            11: ksTeams,
+            12: kyTeams,
+            13: laTeams,
+            14: mnTeams,
+            15: msTeams,
+            16: moTeams,
+            17: mtTeams,
+            18: RneTeams,
+            19: nvTeams,
+            20: nmTeams,
+            21: nyTeams,
+            22: ndTeams,
+            23: ohTeams,
+            24: okTeams,
+            25: paTeams,
+            26: sdTeams,
+            27: tnTeams,
+            28: utTeams,
+            29: wvTeams,
+            30: wiTeams,
+            31: wyTeams,
+            32: prTeams,
+            33: guTeams,
+            34: otherTeams,
+
+            35: ausTeams,
+            36: braTeams,
+            37: canTeams,
+            38: chiTeams,
+            39: japTeams,
+            40: mexTeams,
+            41: turTeams,
+            42: ukTeams,
+            43: netTeams,
+            44: taiTeams,
+            45: polTeams, 
+            46: bulTeams,
+            47: greTeams,
+            48: domTeams,
+            49: indTeams, 
+            50: argTeams, 
+            51: romTeams, 
+            52: azeTeams, 
+            53: sweTeams, 
+            54: fraTeams, 
+            55: botTeams, 
+            56: ecuTeams, 
+            57: surTeams, 
+            58: serTeams, 
+            59: comTeams, 
+            60: pakTeams, 
+            61: ukrTeams, 
+            62: phiTeams,
+            63: gamTeams,
+            64: czeTeams,
+            65: micTeams,
+            66: kazTeams,
+            67: manTeams,
+            68: belTeams,
+            69: colTeams,
+            70: croTeams,
+            71: zelTeams,
+            72: afgTeams,
+            73: bosTeams,
+            74: norTeams,
+            75: itaTeams,
+            76: denTeams,
+            77: swiTeams,
+            78: gerTeams,
+            79: sinTeams,
+            80: chiTeams,
+            81: libTeams,
+            82: uaeTeams,
+            83: safTeams,
+            84: armTeams,
+            85: venTeams,
+            86: vieTeams,
+            87: zimTeams,
+            88: morTeams,
+            89: tonTeams,
+            90: inoTeams,
+            91: ethTeams,
+            92: parTeams,
+            93: panTeams,
+            94: parTeams,
+            95: lesTeams,
+            96: barTeams,
+            97: sokTeams
+        }
+        session['choice'] = random.randrange(0, regional_choices.__len__())
+        temp = regional_choices.get(session['choice'], [])
+        print(session['choice'])
+        print(temp)
+
         try:
             if session['regional'] and session['selected_regions'] == []:
-                team_list = regionalTeams
+                session['choice'] = random.randrange(0, 68)
+                temp = regional_choices.items()[session['choice']]
             elif random.choice([True, False]) and session.get('regional'):
                 #regional
                 team_list = regionalTeams
@@ -181,7 +377,9 @@ def dark_mode():
     return "0"
 
 def getTeams():
-    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams, regionalTeams
+    global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
+    global ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams
+    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams
 
     def fetch_teams(url, team_list, pageNum=None):
         if pageNum is not None:
@@ -191,7 +389,7 @@ def getTeams():
             data = response.json()
             if data:
                 for team in data:
-                    curTeam = [team['team_number'], team['nickname'], team['city'] + ", " + team['state_prov']]
+                    curTeam = [team['team_number'], team['nickname'], team['city'], team['state_prov'], team['country']]
                     team_list.append(curTeam)
 
     urls = [
@@ -216,9 +414,290 @@ def getTeams():
         for url, team_list in zip(district_urls, district_teams):
             futures.append(executor.submit(fetch_teams, url, team_list))
         concurrent.futures.wait(futures)
-
+        
     regionalTeams = [team for team in frcTeams if team not in fimTeams + neTeams + pnwTeams + ontTeams + chsTeams + finTeams + fncTeams + pchTeams + fitTeams + fmaTeams + isrTeams + fscTeams]
 
+    # Sort regional teams into their respective state or country
+    for team in regionalTeams:
+        country = team[4]
+        try:
+            state = team[3].lower()
+        except:
+            state = None
+        try:
+            state2 = team[2].lower()
+        except:
+            state2 = None
+
+        states = [state2, country, state]
+        for state in states:
+            if state != None:
+                match state:
+                    case "alabama" | "al":
+                        alTeams.append(team)
+                        pass
+                    case "alaska" | "ak":
+                        akTeams.append(team)
+                        pass
+                    case "arizona" | "az":
+                        azTeams.append(team)
+                        pass
+                    case "arkansas" | "ar":
+                        arTeams.append(team)
+                        pass
+                    case "california" | "ca":
+                        caTeams.append(team)
+                        pass
+                    case "colorado" | "co":
+                        coTeams.append(team)
+                        pass
+                    case "florida" | "fl":
+                        flTeams.append(team)
+                        pass
+                    case "hawaii" | "hi":
+                        hiTeams.append(team)
+                        pass
+                    case "idaho" | "id":
+                        idTeams.append(team)
+                        pass
+                    case "illinois" | "il":
+                        ilTeams.append(team)
+                        pass
+                    case "iowa" | "ia":
+                        iaTeams.append(team)
+                        pass
+                    case "kansas" | "ks":
+                        ksTeams.append(team)
+                        pass
+                    case "kentucky" | "ky":
+                        kyTeams.append(team)
+                        pass
+                    case "louisiana" | "la":
+                        laTeams.append(team)
+                        pass
+                    case "minnesota" | "mn":
+                        mnTeams.append(team)
+                        pass
+                    case "mississippi" | "ms":
+                        msTeams.append(team)
+                        pass
+                    case "missouri" | "mo":
+                        moTeams.append(team)
+                        pass
+                    case "montana" | "mt":
+                        mtTeams.append(team)
+                        pass
+                    case "nebraska" | "ne":
+                        RneTeams.append(team)
+                        pass
+                    case "nevada" | "nv":
+                        nvTeams.append(team)
+                        pass
+                    case "new mexico" | "nm":
+                        nmTeams.append(team)
+                        pass
+                    case "new york" | "ny":
+                        nyTeams.append(team)
+                        pass
+                    case "north dakota" | "nd":
+                        ndTeams.append(team)
+                        pass
+                    case "ohio" | "oh":
+                        ohTeams.append(team)
+                        pass
+                    case "oklahoma" | "ok":
+                        okTeams.append(team)
+                        pass
+                    case "pennsylvania" | "pa":
+                        paTeams.append(team)
+                        pass
+                    case "south dakota" | "sd":
+                        sdTeams.append(team)
+                        pass
+                    case "tennessee" | "tn":
+                        tnTeams.append(team)
+                        pass
+                    case "utah" | "ut":
+                        utTeams.append(team)
+                        pass
+                    case "west virginia" | "wv":
+                        wvTeams.append(team)
+                        pass
+                    case "wisconsin" | "wi":
+                        wiTeams.append(team)
+                        pass
+                    case "wyoming" | "wy":
+                        wyTeams.append(team)
+                        pass
+                    case "puerto rico" | "pr":
+                        prTeams.append(team)
+                        pass
+                    case "guam":
+                        guTeams.append(team)
+                        pass
+                    case "texas" | "tx":
+                        fitTeams.append(team)
+                        pass
+                    case "new jersey" | "nj":
+                        fmaTeams.append(team)
+                        pass
+                    case "delaware" | "de":
+                        fmaTeams.append(team)
+                        pass
+                    case "massachusetts" | "ma":
+                        neTeams.append(team)
+                        pass
+                    case "vermont" | "vt":
+                        neTeams.append(team)
+                        pass
+                    case "rhode island" | "ri":
+                        neTeams.append(team)
+                        pass
+                    case "maine" | "me":
+                        neTeams.append(team)
+                        pass
+                    case "maryland" | "md":
+                        neTeams.append(team)
+                        pass
+                    case "new hampshire" | "nh":
+                        neTeams.append(team)
+                        pass
+                    case "conneticut" | "ct":
+                        neTeams.append(team)
+                        pass
+                    case "michigan" | "mi":
+                        fimTeams.append(team)
+                        pass
+                    case "georgia" | "ga":
+                        pchTeams.append(team)
+                        pass
+                    case "south carolina" | "sc": #Change for 2025 to be south carolina district
+                        pchTeams.append(team)
+                        pass
+                    case "north carolina" | "nc":
+                        fncTeams.append(team)
+                        pass
+                    case "oregon" | "or":
+                        pnwTeams.append(team)
+                        pass
+                    case "washington" | "wa":
+                        pnwTeams.append(team)
+                        pass
+                    case "indiana" | "in":
+                        finTeams.append(team)
+                        pass
+                    case "virginia" | "va" if state != "west virginia":
+                        chsTeams.append(team)
+                        pass
+                    case "Israel":
+                        isrTeams.append(team)
+                        pass
+                    case "Turkey" | "Türkiye":
+                        turTeams.append(team)
+                        pass
+                    case "China" | "cn":
+                        chiTeams.append(team)
+                        pass
+                    case "Chinese Taipei" | "Taiwan":
+                        taiTeams.append(team)
+                        pass
+                    case "Australia":
+                        ausTeams.append(team)
+                        pass
+                    case "Canada":
+                        canTeams.append(team)
+                        pass
+                    case "Kingdom" | "UK" | "United Kingdom":
+                        ukTeams.append(team)
+                        pass
+                    case "Belize":
+                        belTeams.append(team)
+                        pass
+                    case "Ukraine":
+                        ukrTeams.append(team)
+                        pass
+                    case "Federated States of Micronesia":
+                        micTeams.append(team)
+                        pass
+                    case "Kazakhstan":
+                        kazTeams.append(team)
+                        pass
+                    case "Czech Republic":
+                        czeTeams.append(team)
+                        pass
+                    case "Gambia":
+                        gamTeams.append(team)
+                        pass
+                    case "Philippines":
+                        phiTeams.append(team)
+                        pass
+                    case "Pakistan":
+                        pakTeams.append(team)
+                        pass
+                    case "Comoros":
+                        comTeams.append(team)
+                        pass
+                    case "Serbia":
+                        serTeams.append(team)
+                        pass
+                    case "Suriname":
+                        surTeams.append(team)
+                        pass
+                    case "Ecuador":
+                        ecuTeams.append(team)
+                        pass
+                    case "Botswana":
+                        botTeams.append(team)
+                        pass
+                    case "France":
+                        fraTeams.append(team)
+                        pass
+                    case "Sweden":
+                        sweTeams.append(team)
+                        pass
+                    case "Azerbaijan":
+                        azeTeams.append(team)
+                        pass
+                    case "Romania":
+                        romTeams.append(team)
+                        pass
+                    case "Argentina":
+                        argTeams.append(team)
+                        pass
+                    case "India":
+                        indTeams.append(team)
+                        pass
+                    case "Dominican Republic":
+                        domTeams.append(team)
+                        pass
+                    case "Greece":
+                        greTeams.append(team)
+                        pass
+                    case "Bulgaria":
+                        bulTeams.append(team)
+                        pass
+                    case "Poland":
+                        polTeams.append(team)
+                        pass
+                    case "Netherlands":
+                        netTeams.append(team)
+                        pass
+                    case "Mexico":
+                        mexTeams.append(team)
+                        pass
+                    case "Japan":
+                        japTeams.append(team)
+                        pass
+                    case "Brazil":
+                        braTeams.append(team)
+                        pass
+            else:
+                if states[0] == None and states[1] == None and states[2] == None:
+                    otherTeams.append(team)
+    
+    # Remove teams from regionalTeams that appear in other region team lists
+    all_other_teams = set(tuple(team) for team_list in [alTeams, akTeams, azTeams, arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, prTeams, ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, fmaTeams, fitTeams, pnwTeams, neTeams, pchTeams, fncTeams, finTeams, isrTeams, fimTeams, ontTeams, chsTeams, guTeams, belTeams, otherTeams] for team in team_list)
+    regionalTeams = [team for team in regionalTeams if tuple(team) not in all_other_teams]
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():
