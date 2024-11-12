@@ -15,15 +15,22 @@
     </div>
 
     <div class="main-container">
-        <div class="sidebar">
-            <h2>Region Specific</h2>
+        <div class="sidebar"></div>
+            <h2>Regional Specific</h2>
             <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            <label><input type="checkbox" id="alaska" {% if regional %}checked{% endif %}> Alaska Teams</label><br>
+            <label><input type="checkbox" id="arkansas" {% if regional %}checked{% endif %}> Arkansas Teams</label><br>
+            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Arizona Teams</label><br>
+            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            <h2>District Specific</h2>
             <label><input type="checkbox" id="district" {% if selected_regions %}checked{% endif %}> District Teams</label><br>
             <label><input type="checkbox" id="chesapeake" {% if 'chesapeake' in selected_regions %}checked{% endif %}> FIRST Chesapeake</label><br>
             <label><input type="checkbox" id="michigan" {% if 'michigan' in selected_regions %}checked{% endif %}> FIRST In Michigan</label><br>
             <label><input type="checkbox" id="texas" {% if 'texas' in selected_regions %}checked{% endif %}> FIRST In Texas</label><br>
             <label><input type="checkbox" id="indiana" {% if 'indiana' in selected_regions %}checked{% endif %}> FIRST Indiana Robotics</label><br>
-            <label><input type="checkbox" id="isreal" {% if 'isreal' in selected_regions %}checked{% endif %}> FIRST Isreal</label><br>
+            <label><input type="checkbox" id="isreal" {% if 'israel' in selected_regions %}checked{% endif %}> FIRST Israel</label><br>
             <label><input type="checkbox" id="mid-atlantic" {% if 'mid-atlantic' in selected_regions %}checked{% endif %}> FIRST Mid-Atlantic</label><br>
             <label><input type="checkbox" id="northcarolina" {% if 'northcarolina' in selected_regions %}checked{% endif %}> FIRST North Carolina</label><br>
             <label><input type="checkbox" id="southcarolina"{% if 'southcarolina' in selected_regions %}checked{% endif %}> <s>FIRST South Carolina</s></label><br>

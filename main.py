@@ -84,6 +84,7 @@ micTeams = [] #Micronesia
 kazTeams = [] #Kazakhstan
 manTeams = [] #Manisia
 belTeams = [] #Belize
+
 colTeams = [] #Columbia
 croTeams = [] #Croatia
 zelTeams = [] #New Zealand
@@ -95,7 +96,7 @@ denTeams = [] #Denmark
 swiTeams = [] #Switzerland
 gerTeams = [] #Germany
 sinTeams = [] #Singapore
-chiTeams = [] #Chile
+chlTeams = [] #Chile
 libTeams = [] #Libya
 uaeTeams = [] #United Arab Emirates
 safTeams = [] #South Africa
@@ -109,7 +110,6 @@ inoTeams = [] #Indonesia
 ethTeams = [] #Ethiopia
 parTeams = [] #Paraguay
 panTeams = [] #Panama
-parTeams = [] #Paraguay
 lesTeams = [] #Lesotho
 barTeams = [] #Barbados
 sokTeams = [] #South Korea
@@ -229,7 +229,7 @@ def genRandomTeam():
             77: swiTeams,
             78: gerTeams,
             79: sinTeams,
-            80: chiTeams,
+            80: chlTeams,
             81: libTeams,
             82: uaeTeams,
             83: safTeams,
@@ -248,18 +248,15 @@ def genRandomTeam():
             96: barTeams,
             97: sokTeams
         }
-        session['choice'] = random.randrange(0, regional_choices.__len__())
-        temp = regional_choices.get(session['choice'], [])
-        print(session['choice'])
-        print(temp)
 
         try:
-            if session['regional'] and session['selected_regions'] == []:
-                session['choice'] = random.randrange(0, 68)
-                temp = regional_choices.items()[session['choice']]
-            elif random.choice([True, False]) and session.get('regional'):
+            if random.choice([True, False]) and session.get('regional'):
                 #regional
-                team_list = regionalTeams
+                session['choice'] = random.randrange(0, regional_choices.__len__())
+                temp = regional_choices.get(session['choice'], [])
+                temp = temp[random.randrange(0, temp.__len__())]
+                print(session['choice'])
+                print(temp)
             else:
                 #district
                 while True:
@@ -279,7 +276,7 @@ def genRandomTeam():
                             temp = 'indiana'
                             pass
                         case 4:
-                            temp = 'isreal'
+                            temp = 'israel'
                             pass
                         case 5:
                             temp = 'mid-atlantic'
@@ -342,7 +339,7 @@ def root():
         session['curTeamState'] = "No State"
 
         if 'selected_regions' not in session:
-            session['selected_regions'] = ['chesapeake', 'michigan', 'texas', 'indiana', 'isreal', 'mid-atlantic', 'northcarolina', 'newengland', 'ontario', 'pacificnorthwest', 'peachtree']
+            session['selected_regions'] = ['chesapeake', 'michigan', 'texas', 'indiana', 'israel', 'mid-atlantic', 'northcarolina', 'newengland', 'ontario', 'pacificnorthwest', 'peachtree']
         if 'regional' not in session:
             session['regional'] = True
         
@@ -378,7 +375,7 @@ def dark_mode():
 
 def getTeams():
     global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
-    global ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams
+    global ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, manTeams, belTeams, colTeams, croTeams,zelTeams,afgTeams,bosTeams,norTeams,itaTeams,denTeams,swiTeams,gerTeams,sinTeams,chlTeams,libTeams,uaeTeams,safTeams,armTeams,venTeams,vieTeams,zimTeams,morTeams,tonTeams,inoTeams,ethTeams,parTeams,panTeams,parTeams,lesTeams,barTeams,sokTeams
     global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams
 
     def fetch_teams(url, team_list, pageNum=None):
@@ -691,12 +688,97 @@ def getTeams():
                     case "Brazil":
                         braTeams.append(team)
                         pass
+                    case "Colombia":
+                        colTeams.append(team)
+                        pass
+                    case "Croatia":
+                        croTeams.append(team)
+                        pass
+                    case "New Zealand":
+                        zelTeams.append(team)
+                        pass
+                    case "Afghanistan":
+                        afgTeams.append(team)
+                        pass
+                    case "Bosnia and Herzegovina":
+                        bosTeams.append(team)
+                        pass
+                    case "Norway":
+                        norTeams.append(team)
+                        pass
+                    case "Italy":
+                        itaTeams.append(team)
+                        pass
+                    case "Denmark":
+                        denTeams.append(team)
+                        pass
+                    case "Switzerland":
+                        swiTeams.append(team)
+                        pass
+                    case "Germany":
+                        gerTeams.append(team)
+                        pass
+                    case "Singapore":
+                        sinTeams.append(team)
+                        pass
+                    case "Chile":
+                        chlTeams.append(team)
+                        pass
+                    case "Libya":
+                        libTeams.append(team)
+                        pass
+                    case "United Arab Emirates":
+                        uaeTeams.append(team)
+                        pass
+                    case "South Africa":
+                        safTeams.append(team)
+                        pass
+                    case "Armenia":
+                        armTeams.append(team)
+                        pass
+                    case "Venezuela":
+                        venTeams.append(team)
+                        pass
+                    case "Vietnam":
+                        vieTeams.append(team)
+                        pass
+                    case "Zimbabwe":
+                        zimTeams.append(team)
+                        pass
+                    case "Morocco":
+                        morTeams.append(team)
+                        pass
+                    case "Tonga":
+                        tonTeams.append(team)
+                        pass
+                    case "Indonesia":
+                        inoTeams.append(team)
+                        pass
+                    case "Ethiopia":
+                        ethTeams.append(team)
+                        pass
+                    case "Paraguay":
+                        parTeams.append(team)
+                        pass
+                    case "Panama":
+                        panTeams.append(team)
+                        pass
+                    case "Lesotho":
+                        lesTeams.append(team)
+                        pass
+                    case "Barbados":
+                        barTeams.append(team)
+                        pass
+                    case "South Korea":
+                        sokTeams.append(team)
+                        pass
+
             else:
                 if states[0] == None and states[1] == None and states[2] == None:
                     otherTeams.append(team)
     
     # Remove teams from regionalTeams that appear in other region team lists
-    all_other_teams = set(tuple(team) for team_list in [alTeams, akTeams, azTeams, arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, prTeams, ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, fmaTeams, fitTeams, pnwTeams, neTeams, pchTeams, fncTeams, finTeams, isrTeams, fimTeams, ontTeams, chsTeams, guTeams, belTeams, otherTeams] for team in team_list)
+    all_other_teams = set(tuple(team) for team_list in [alTeams, akTeams, azTeams, arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, prTeams, ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, fmaTeams, fitTeams, pnwTeams, neTeams, pchTeams, fncTeams, finTeams, isrTeams, fimTeams, ontTeams, chsTeams, guTeams, belTeams, colTeams,croTeams,zelTeams,afgTeams,bosTeams,norTeams,itaTeams,denTeams,swiTeams,gerTeams,sinTeams,chlTeams,libTeams,uaeTeams,safTeams,armTeams,venTeams,vieTeams,zimTeams,morTeams,tonTeams,inoTeams,ethTeams,parTeams, panTeams,lesTeams,barTeams,sokTeams, otherTeams] for team in team_list)
     regionalTeams = [team for team in regionalTeams if tuple(team) not in all_other_teams]
 
 @app.route('/update-teams', methods=['POST'])
