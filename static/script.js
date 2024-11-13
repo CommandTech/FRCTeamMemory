@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 teamName.textContent = data.newTeamName;
                 teamName.style.color = prevColor;
 
-                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState;
+                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
 
                 isSubmitting = false;
             }, 2000); // 2000 milliseconds = 2 seconds

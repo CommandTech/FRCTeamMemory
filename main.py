@@ -252,38 +252,41 @@ def genRandomTeam():
         try:
             if random.choice([True, False]) and session.get('regional'):
                 #regional
-                session['choice'] = random.randrange(0, regional_choices.__len__())
-                temp = regional_choices.get(session['choice'], [])
-                temp = temp[random.randrange(0, temp.__len__())]
-                print(session['choice'])
-                print(temp)
-
                 session['choice'] = random.choice(session['regional'])
 
+                team_list = globals()[session['choice']]
             else:
                 #district
                 session['choice'] = random.choice(session['selected_regions'])
-                print(session['choice'])
-                print(globals()[session['choice']])
 
-                if session['selected_regions'] == []:
-                    session['curTeam'] = -1
-                    session['curTeamName'] = "No Teams Loaded"
-                    team_list = []
-                else:
-                    team_list = team_choices.get(session['choice'], [])
+                team_list = globals()[session['choice']]
 
             if team_list:
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
                 session['curTeamName'] = team[1]
                 session['curTeamCity'] = team[2].split(", ")[0]
-                session['curTeamState'] = team[2].split(", ")[1]
+
+                print(team[0])
+                print(team[1])
+                print(team[2])
+                print(team[3])
+                print(team[4])
+
+                try:
+                    session['curTeamState'] = team[2].split(", ")[1]
+                except:
+                    session['curTeamState'] = team[3]
+
+                session['curTeamCountry'] = team[4]
+
         except:
+            print("excepted")
             session['curTeam'] = -1
             session['curTeamName'] = "No Teams Loaded"
             session['curTeamCity'] = "No City"
             session['curTeamState'] = "No State"
+            session['curTeamCountry'] = "No Country"
         
         
 
@@ -298,6 +301,7 @@ def root():
 
         session['curTeamCity'] = "No City"
         session['curTeamState'] = "No State"
+        session['curTeamCountry'] = "No Country"
 
         if 'selected_regions' not in session:
             session['selected_regions'] = ['chesapeake', 'michigan', 'texas', 'indiana', 'israel', 'mid-atlantic', 'northcarolina', 'newengland', 'ontario', 'pacificnorthwest', 'peachtree']
@@ -305,8 +309,8 @@ def root():
             session['regional'] = True
         
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False), city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"))
-
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False), city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State", country=session.get('curTeamCountry', "No Country")))
+    
 @app.route('/check-team', methods=['POST'])
 def check_team():
     data = request.get_json()
@@ -753,7 +757,8 @@ def update_teams():
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState']})
+    print(session['curTeamCountry'])
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry']})
 
 def startWeb():
     app.run(host='0.0.0.0', port=81)
