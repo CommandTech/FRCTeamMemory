@@ -267,12 +267,6 @@ def genRandomTeam():
                 session['curTeamName'] = team[1]
                 session['curTeamCity'] = team[2].split(", ")[0]
 
-                print(team[0])
-                print(team[1])
-                print(team[2])
-                print(team[3])
-                print(team[4])
-
                 try:
                     session['curTeamState'] = team[2].split(", ")[1]
                 except:
@@ -309,7 +303,7 @@ def root():
             session['regional'] = True
         
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False), city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State", country=session.get('curTeamCountry', "No Country")))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', False), city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
     
 @app.route('/check-team', methods=['POST'])
 def check_team():
