@@ -5,7 +5,7 @@ const teamLocation = document.getElementById('team-location');
 
 const regionalCheckbox = document.getElementById('regional');
 const districtCheckbox = document.getElementById('district');
-const regionCheckboxes = document.querySelectorAll('#chesapeake, #michigan, #texas, #indiana, #isreal, #mid-atlantic, #northcarolina, #newengland, #ontario, #pacificnorthwest, #peachtree');
+const regionCheckboxes = document.querySelectorAll('#chsTeams, #fimTeams, #fitTeams, #finTeams, #isrTeams, #fmaTeams, #fncTeams, #fscTeams, #neTeams, #ontTeams, #pnwTeams, #pchTeams');
 
 document.addEventListener('DOMContentLoaded', (event) => {
     let isSubmitting = false;

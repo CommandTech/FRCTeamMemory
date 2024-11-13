@@ -257,54 +257,15 @@ def genRandomTeam():
                 temp = temp[random.randrange(0, temp.__len__())]
                 print(session['choice'])
                 print(temp)
+
+                session['choice'] = random.choice(session['regional'])
+
             else:
                 #district
-                while True:
-                    session['choice'] = random.randrange(0, 11)
-                    temp = ''
-                    match (session['choice']):
-                        case 0:
-                            temp = 'chesapeake'
-                            pass
-                        case 1:
-                            temp = 'michigan'
-                            pass
-                        case 2:
-                            temp = 'texas'
-                            pass
-                        case 3:
-                            temp = 'indiana'
-                            pass
-                        case 4:
-                            temp = 'israel'
-                            pass
-                        case 5:
-                            temp = 'mid-atlantic'
-                            pass
-                        case 6:
-                            temp = 'northcarolina'
-                            pass
-                        case 7:
-                            temp = 'southcarolina'
-                            pass
-                        case 8:
-                            temp = 'newengland'
-                            pass
-                        case 9:
-                            temp = 'ontario'
-                            pass
-                        case 10:
-                            temp = 'pacificnorthwest'
-                            pass
-                        case 11:
-                            temp = 'peachtree'
-                            pass
+                session['choice'] = random.choice(session['selected_regions'])
+                print(session['choice'])
+                print(globals()[session['choice']])
 
-                    if temp in session.get('selected_regions', []):
-                        break
-                    elif session['selected_regions'] == []:
-                        break
-                
                 if session['selected_regions'] == []:
                     session['curTeam'] = -1
                     session['curTeamName'] = "No Teams Loaded"
