@@ -115,7 +115,7 @@ function reloadPage() {
     .then(data => {
         if (data.status === 'success') {
             teamName.textContent = data.newTeamName;
-            teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState;
+            teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
         }
     })
     .catch(error => console.error('Error:', error));

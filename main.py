@@ -317,7 +317,7 @@ def check_team():
         match = teamNumber == session.get('curTeam',0)
         correctTeamNumber = session.get('curTeam',0)
         genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State")})
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country")})
 
 @app.route('/script.js')
 def script():
@@ -751,7 +751,6 @@ def update_teams():
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    print(session['curTeamCountry'])
     return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry']})
 
 def startWeb():
