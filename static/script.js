@@ -8,6 +8,8 @@ const districtCheckbox = document.getElementById('district');
 const regionCheckboxes = document.querySelectorAll('#chsTeams, #fimTeams, #fitTeams, #finTeams, #isrTeams, #fmaTeams, #fncTeams, #fscTeams, #neTeams, #ontTeams, #pnwTeams, #pchTeams');
 const regionalCheckboxes = document.querySelectorAll('#alTeams, #akTeams, #azTeams, #arTeams, #caTeams, #coTeams, #flTeams, #hiTeams, #idTeams, #ilTeams, #iaTeams, #ksTeams,#kyTeams, #laTeams, #mnTeams, #msTeams, #moTeams, #mtTeams, #RneTeams, #nvTeams, #nmTeams, #nyTeams, #ndTeams, #ohTeams, #okTeams, #paTeams, #sdTeams, #tnTeams, #utTeams, #wvTeams, #wiTeams, #wyTeams, #prTeams, #guTeams, #otherTeams, #ausTeams, #braTeams, #canTeams, #chiTeams, #japTeams, #mexTeams, #turTeams, #ukTeams, #netTeams, #taiTeams, #polTeams, #bulTeams, #greTeams, #domTeams, #indTeams, #argTeams, #romTeams, #azeTeams, #sweTeams, #fraTeams, #botTeams, #ecuTeams, #surTeams, #serTeams, #comTeams, #pakTeams, #ukrTeams, #phiTeams, #gamTeams, #czeTeams, #micTeams, #kazTeams, #manTeams, #belTeams, #colTeams, #croTeams, #zelTeams, #afgTeams, #bosTeams, #norTeams, #itaTeams, #denTeams, #swiTeams, #gerTeams, #sinTeams, #chlTeams, #libTeams, #uaeTeams, #safTeams, #armTeams, #venTeams, #vieTeams, #zimTeams, #morTeams, #tonTeams, #inoTeams, #ethTeams, #parTeams, #panTeams, #lesTeams, #barTeams, #sokTeams, #saiTeams,#papTeams');
 
+var hardMode = false;
+
 document.addEventListener('DOMContentLoaded', (event) => {
     let isSubmitting = false;
 
@@ -30,10 +32,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (data.match) {
                 textBox.style.color = 'green';
                 teamName.style.color = 'green';
+
+                if (hardMode) {
+                    teamName.textContent = data.correctTeamName + ' - ' + data.correctTeamNumber;
+                }
             } else {
                 textBox.style.color = 'red';
                 teamName.style.color = 'red';
-                teamName.textContent = teamName.textContent + ' - ' + data.correctTeamNumber;
+                
+                if (hardMode) {
+                    teamName.textContent = data.correctTeamName + ' - ' + data.correctTeamNumber;
+                }else{
+                    teamName.textContent = teamName.textContent + ' - ' + data.correctTeamNumber;
+                }
             }
 
             // Wait for 2 seconds before resetting the text box and updating the team name
@@ -43,7 +54,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 textBox.style.color = prevColor;
 
                 // Update the team name and reset its color
-                teamName.textContent = data.newTeamName;
+                if (hardMode) {
+                    teamName.textContent = "";
+                }else{
+                    teamName.textContent = data.newTeamName;
+                }
                 teamName.style.color = prevColor;
 
                 teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
@@ -141,7 +156,11 @@ function reloadPage() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            teamName.textContent = data.newTeamName;
+            if (hardMode) {
+                teamName.textContent = "";
+            }else{
+                teamName.textContent = data.newTeamName;
+            }
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
         }
     })
@@ -151,4 +170,9 @@ function reloadPage() {
 document.getElementById('darkModeSwitch').addEventListener('change', function() {
     fetch('/dark-mode');
     document.body.classList.toggle('dark-mode');
+});
+
+document.getElementById('hardModeSwitch').addEventListener('change', function() {
+    hardMode = !hardMode;
+    reloadPage();
 });
