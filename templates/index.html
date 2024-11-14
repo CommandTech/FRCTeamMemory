@@ -18,17 +18,24 @@
         <div class="sidebar"></div>
             <h2>Regional Specific</h2>
             <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
-            <label><input type="checkbox" id="alabama" {% if regional %}checked{% endif %}> Alabama Teams</label><br>
-            <label><input type="checkbox" id="alaska" {% if regional %}checked{% endif %}> Alaska Teams</label><br>
-            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Arizona Teams</label><br>
-            <label><input type="checkbox" id="arkansas" {% if regional %}checked{% endif %}> Arkansas Teams</label><br>
-            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
-            <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
+            {% for team in ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'ausTeams', 'braTeams', 'canTeams', 'chiTeams', 'japTeams', 'mexTeams', 'turTeams', 'ukTeams', 'netTeams', 'taiTeams', 'polTeams', 'bulTeams', 'greTeams', 'domTeams', 'indTeams', 'argTeams', 'romTeams', 'azeTeams', 'sweTeams', 'fraTeams', 'botTeams', 'ecuTeams', 'surTeams', 'serTeams', 'comTeams', 'pakTeams', 'ukrTeams', 'phiTeams', 'gamTeams', 'czeTeams', 'micTeams', 'kazTeams', 'manTeams', 'belTeams', 'colTeams', 'croTeams', 'zelTeams', 'afgTeams', 'bosTeams', 'norTeams', 'itaTeams', 'denTeams', 'swiTeams', 'gerTeams', 'sinTeams', 'chlTeams', 'libTeams', 'uaeTeams', 'safTeams', 'armTeams', 'venTeams', 'vieTeams', 'zimTeams', 'morTeams', 'tonTeams', 'inoTeams', 'ethTeams', 'parTeams', 'panTeams', 'lesTeams', 'barTeams', 'sokTeams'] %}
+                {% if team in team_name_mapping and team_name_mapping[team] in ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Florida', 'Hawaii', 'Idaho', 'Illinois', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Mexico', 'New York', 'North Dakota', 'Ohio', 'Oklahoma', 'Pennsylvania', 'South Dakota', 'Tennessee', 'Utah', 'West Virginia', 'Wisconsin', 'Wyoming', 'Puerto Rico', 'Guam', 'Other'] %}
+                    <label><input type="checkbox" id="{{ team }}" {% if team in regional %}checked{% endif %}> {{ team_name_mapping[team] }}</label><br>
+                {% endif %}
+            {% endfor %}
+
+            <h2>Country Specific</h2>
+            {% for team in ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'ausTeams', 'braTeams', 'canTeams', 'chiTeams', 'japTeams', 'mexTeams', 'turTeams', 'ukTeams', 'netTeams', 'taiTeams', 'polTeams', 'bulTeams', 'greTeams', 'domTeams', 'indTeams', 'argTeams', 'romTeams', 'azeTeams', 'sweTeams', 'fraTeams', 'botTeams', 'ecuTeams', 'surTeams', 'serTeams', 'comTeams', 'pakTeams', 'ukrTeams', 'phiTeams', 'gamTeams', 'czeTeams', 'micTeams', 'kazTeams', 'manTeams', 'belTeams', 'colTeams', 'croTeams', 'zelTeams', 'afgTeams', 'bosTeams', 'norTeams', 'itaTeams', 'denTeams', 'swiTeams', 'gerTeams', 'sinTeams', 'chlTeams', 'libTeams', 'uaeTeams', 'safTeams', 'armTeams', 'venTeams', 'vieTeams', 'zimTeams', 'morTeams', 'tonTeams', 'inoTeams', 'ethTeams', 'parTeams', 'panTeams', 'lesTeams', 'barTeams', 'sokTeams'] %}
+                {% if team in team_name_mapping and team_name_mapping[team] not in ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Florida', 'Hawaii', 'Idaho', 'Illinois', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Mexico', 'New York', 'North Dakota', 'Ohio', 'Oklahoma', 'Pennsylvania', 'South Dakota', 'Tennessee', 'Utah', 'West Virginia', 'Wisconsin', 'Wyoming', 'Puerto Rico', 'Guam', 'Other'] %}
+                    <label><input type="checkbox" id="{{ team }}" {% if team in regional %}checked{% endif %}> {{ team_name_mapping[team] }}</label><br>
+                {% endif %}
+            {% endfor %}
+
             <h2>District Specific</h2>
             <label><input type="checkbox" id="district" {% if selected_regions %}checked{% endif %}> District Teams</label><br>
             <label><input type="checkbox" id="chsTeams" {% if 'chsTeams' in selected_regions %}checked{% endif %}> FIRST Chesapeake</label><br>
             <label><input type="checkbox" id="fimTeams" {% if 'fimTeams' in selected_regions %}checked{% endif %}> FIRST In Michigan</label><br>
-            <label><input type="checkbox" id="fitTeams " {% if 'fitTeams' in selected_regions %}checked{% endif %}> FIRST In Texas</label><br>
+            <label><input type="checkbox" id="fitTeams" {% if 'fitTeams' in selected_regions %}checked{% endif %}> FIRST In Texas</label><br>
             <label><input type="checkbox" id="finTeams" {% if 'finTeams' in selected_regions %}checked{% endif %}> FIRST Indiana Robotics</label><br>
             <label><input type="checkbox" id="isrTeams" {% if 'isrTeams' in selected_regions %}checked{% endif %}> FIRST Israel</label><br>
             <label><input type="checkbox" id="fmaTeams" {% if 'fmaTeams' in selected_regions %}checked{% endif %}> FIRST Mid-Atlantic</label><br>
@@ -43,14 +50,13 @@
 
         <div class="form-container" id="first-page">
             <h1 class="team-name" id="team-name">{{team}}</h1>
-            <h3 class="team-location" id="team-location">{{city}}, {{state}}, {{country}}</h2>
+            <h3 class="team-location" id="team-location">{{city}}, {{state}}, {{country}}</h3>
             <div class="centered-content">
                 <input type="text" id="team-input" placeholder="12345" maxlength="5" pattern=".{0,5}">
                 <button type="submit" id="submit-button">Submit</button>
-                <button id='reload' onclick="reloadPage()">Refresh Teams</button>
             </div>
         </div>
     </div>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

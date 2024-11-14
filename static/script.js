@@ -6,6 +6,7 @@ const teamLocation = document.getElementById('team-location');
 const regionalCheckbox = document.getElementById('regional');
 const districtCheckbox = document.getElementById('district');
 const regionCheckboxes = document.querySelectorAll('#chsTeams, #fimTeams, #fitTeams, #finTeams, #isrTeams, #fmaTeams, #fncTeams, #fscTeams, #neTeams, #ontTeams, #pnwTeams, #pchTeams');
+const regionalCheckboxes = document.querySelectorAll('#alTeams, #akTeams, #azTeams, #arTeams, #caTeams, #coTeams, #flTeams, #hiTeams, #idTeams, #ilTeams, #iaTeams, #ksTeams,#kyTeams, #laTeams, #mnTeams, #msTeams, #moTeams, #mtTeams, #RneTeams, #nvTeams, #nmTeams, #nyTeams, #ndTeams, #ohTeams, #okTeams, #paTeams, #sdTeams, #tnTeams, #utTeams, #wvTeams, #wiTeams, #wyTeams, #prTeams, #guTeams, #otherTeams, #ausTeams, #braTeams, #canTeams, #chiTeams, #japTeams, #mexTeams, #turTeams, #ukTeams, #netTeams, #taiTeams, #polTeams, #bulTeams, #greTeams, #domTeams, #indTeams, #argTeams, #romTeams, #azeTeams, #sweTeams, #fraTeams, #botTeams, #ecuTeams, #surTeams, #serTeams, #comTeams, #pakTeams, #ukrTeams, #phiTeams, #gamTeams, #czeTeams, #micTeams, #kazTeams, #manTeams, #belTeams, #colTeams, #croTeams, #zelTeams, #afgTeams, #bosTeams, #norTeams, #itaTeams, #denTeams, #swiTeams, #gerTeams, #sinTeams, #chlTeams, #libTeams, #uaeTeams, #safTeams, #armTeams, #venTeams, #vieTeams, #zimTeams, #morTeams, #tonTeams, #inoTeams, #ethTeams, #parTeams, #panTeams, #lesTeams, #barTeams, #sokTeams');
 
 document.addEventListener('DOMContentLoaded', (event) => {
     let isSubmitting = false;
@@ -56,6 +57,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const selectedRegions = Array.from(regionCheckboxes)
             .filter(cb => cb.checked)
             .map(cb => cb.id);
+        const selectedRegionals = Array.from(regionalCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.id);
+
 
         fetch('/update-teams', {
             method: 'POST',
@@ -64,8 +69,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             },
             body: JSON.stringify({
                 regions: selectedRegions,
-                regional: regionalCheckbox.checked
+                regional: selectedRegionals
             })
+        })
+        .then(response => response.json())
+        .then(data => {
+            reloadPage();
         })
     }
 
@@ -81,7 +90,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
+
     regionalCheckbox.addEventListener('change', () => {
+        if (regionalCheckbox.checked) {
+            regionalCheckboxes.forEach(cb => cb.checked = true);
+        } else {
+            regionalCheckboxes.forEach(cb => cb.checked = false);
+        }
+        updateTeams();
+    });
+    
+    regionalCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            if (Array.from(regionalCheckboxes).some(cb => cb.checked)) {
+                regionalCheckbox.checked = true;
+            } else {
+                regionalCheckbox.checked = false;
+            }
+            updateTeams();
+        });
+    });
+
+    districtCheckbox.addEventListener('change', () => {
+        if (districtCheckbox.checked) {
+            regionCheckboxes.forEach(cb => cb.checked = true);
+        }else{
+            regionCheckboxes.forEach(cb => cb.checked = false);
+        }
         updateTeams();
     });
     regionCheckboxes.forEach(checkbox => {
@@ -93,14 +128,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
             updateTeams();
         });
-    });
-    districtCheckbox.addEventListener('change', () => {
-            if (districtCheckbox.checked) {
-                regionCheckboxes.forEach(cb => cb.checked = true);
-            }else{
-                regionCheckboxes.forEach(cb => cb.checked = false);
-            }
-            updateTeams();
     });
 });
 
