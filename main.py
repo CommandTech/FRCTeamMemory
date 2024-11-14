@@ -212,6 +212,7 @@ def root():
         if 'dark_mode' not in session:
             session['dark_mode'] = False
         
+        session['currentStreak'] = 0
         session['curTeam'] = 0
         session['curTeamName'] = "Teams Not Loaded Yet"
 
@@ -224,11 +225,11 @@ def root():
         if 'regional' not in session:
             session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
                                 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 
-                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'ausTeams', 'braTeams', 'canTeams', 'chiTeams', 'japTeams', 'mexTeams', 'turTeams', 'ukTeams', 'netTeams', 'taiTeams', 
-                                'polTeams', 'bulTeams', 'greTeams', 'domTeams', 'indTeams', 'argTeams', 'romTeams', 'azeTeams', 'sweTeams', 'fraTeams', 'botTeams', 'ecuTeams', 'surTeams', 'serTeams', 'comTeams', 
-                                'pakTeams', 'ukrTeams', 'phiTeams', 'gamTeams', 'czeTeams', 'micTeams', 'kazTeams', 'manTeams', 'belTeams', 'colTeams', 'croTeams', 'zelTeams', 'afgTeams', 'bosTeams', 'norTeams', 
-                                'itaTeams', 'denTeams', 'swiTeams', 'gerTeams', 'sinTeams', 'chlTeams', 'libTeams', 'uaeTeams', 'safTeams', 'armTeams', 'venTeams', 'vieTeams', 'zimTeams', 'morTeams', 'tonTeams', 
-                                'inoTeams', 'ethTeams', 'parTeams', 'panTeams', 'lesTeams', 'barTeams', 'sokTeams']
+                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
+                                'bulTeams', 'canTeams', 'chlTeams', 'chiTeams', 'colTeams', 'comTeams', 'croTeams', 'czeTeams', 'denTeams', 'domTeams', 'ecuTeams', 'ethTeams', 'fraTeams', 'gamTeams', 'gerTeams', 
+                                'greTeams', 'indTeams', 'inoTeams', 'itaTeams', 'japTeams', 'kazTeams', 'lesTeams', 'libTeams', 'manTeams', 'mexTeams', 'micTeams', 'morTeams', 'netTeams', 'norTeams', 'pakTeams', 
+                                'panTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
+                                'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
 
         genRandomTeam()
         return render_template('index.html', dark_mode=session.get('dark_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
@@ -328,7 +329,6 @@ def getTeams():
         else:
             otherTeams.append(team)
 
-    print(sokTeams)
     # Remove teams from regionalTeams that appear in other region team lists
     all_other_teams = set(tuple(team) for team_list in state_country_map.values() for team in team_list)
     regionalTeams = [team for team in regionalTeams if tuple(team) not in all_other_teams]
