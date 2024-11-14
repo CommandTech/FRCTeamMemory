@@ -189,7 +189,10 @@ def genRandomTeam():
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
                 session['curTeamName'] = team[1]
-                session['curTeamCity'] = team[2].split(", ")[0]
+                try:
+                    session['curTeamCity'] = team[2].split(", ")[0]
+                except:
+                    session['curTeamCity'] = team[2]
 
                 try:
                     session['curTeamState'] = team[2].split(", ")[1]
