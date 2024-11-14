@@ -253,7 +253,7 @@ def check_team():
     
     with app.app_context():
         match = teamNumber == session.get('curTeam',0)
-        if (match):
+        if (match and teamNumber != -1):
             session['currentStreak'] += 1
         else:
             session['currentStreak'] = 0
