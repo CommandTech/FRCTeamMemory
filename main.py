@@ -218,6 +218,8 @@ def root():
             session['dark_mode'] = False
         if 'hard_mode' not in session:
             session['hard_mode'] = False
+        if 'highest_streak' not in session:
+            session['highest_streak'] = 0
         
         session['currentStreak'] = 0
         session['curTeam'] = 0
@@ -239,7 +241,7 @@ def root():
                                 'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
 
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
     
 @app.route('/check-team', methods=['POST'])
 def check_team():
@@ -251,10 +253,18 @@ def check_team():
     
     with app.app_context():
         match = teamNumber == session.get('curTeam',0)
+        if (match):
+            session['currentStreak'] += 1
+        else:
+            session['currentStreak'] = 0
+
+        if session['currentStreak'] > session['highest_streak']:
+            session['highest_streak'] = session['currentStreak']
+        
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
         genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country")})
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
 
 @app.route('/script.js')
 def script():

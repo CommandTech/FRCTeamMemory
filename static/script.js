@@ -2,6 +2,8 @@ const submitButton = document.getElementById('submit-button');
 const textBox = document.getElementById('team-input');
 const teamName = document.getElementById('team-name');
 const teamLocation = document.getElementById('team-location');
+const currentStreak = document.getElementById('streak');
+const highestStreak = document.getElementById('highestStreak');
 
 const regionalCheckbox = document.getElementById('regional');
 const districtCheckbox = document.getElementById('district');
@@ -29,6 +31,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(response => response.json())
         .then(data => {
             const prevColor = teamName.style.color;
+            currentStreak.textContent = "Streak: " + data.streak;
+            highestStreak.textContent = "Highest Streak: " + data.highest_streak;
             if (data.match) {
                 textBox.style.color = 'green';
                 teamName.style.color = 'green';
