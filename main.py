@@ -113,6 +113,8 @@ panTeams = [] #Panama
 lesTeams = [] #Lesotho
 barTeams = [] #Barbados
 sokTeams = [] #South Korea
+papTeams = [] #Papua New Guinea
+saiTeams = [] #Saint Kitts and Nevis
 
 fimTeams = []
 neTeams = []
@@ -150,7 +152,7 @@ team_name_mapping = {
     'sinTeams': 'Singapore', 'chlTeams': 'Chile', 'libTeams': 'Libya', 'uaeTeams': 'United Arab Emirates', 'safTeams': 'South Africa',
     'armTeams': 'Armenia', 'venTeams': 'Venezuela', 'vieTeams': 'Vietnam', 'zimTeams': 'Zimbabwe', 'morTeams': 'Morocco',
     'tonTeams': 'Tonga', 'inoTeams': 'Indonesia', 'ethTeams': 'Ethiopia', 'parTeams': 'Paraguay', 'panTeams': 'Panama',
-    'lesTeams': 'Lesotho', 'barTeams': 'Barbados', 'sokTeams': 'South Korea'
+    'lesTeams': 'Lesotho', 'barTeams': 'Barbados', 'sokTeams': 'South Korea', 'papTeams': 'Papua New Guinea', 'saiTeams': 'Saint Kitts and Nevis'
 }
 
 def genRandomTeam():
@@ -228,7 +230,7 @@ def root():
                                 'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
                                 'bulTeams', 'canTeams', 'chlTeams', 'chiTeams', 'colTeams', 'comTeams', 'croTeams', 'czeTeams', 'denTeams', 'domTeams', 'ecuTeams', 'ethTeams', 'fraTeams', 'gamTeams', 'gerTeams', 
                                 'greTeams', 'indTeams', 'inoTeams', 'itaTeams', 'japTeams', 'kazTeams', 'lesTeams', 'libTeams', 'manTeams', 'mexTeams', 'micTeams', 'morTeams', 'netTeams', 'norTeams', 'pakTeams', 
-                                'panTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
+                                'panTeams','papTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams','saiTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
                                 'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
 
         genRandomTeam()
@@ -264,7 +266,7 @@ def dark_mode():
 def getTeams():
     global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
     global ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, manTeams, belTeams, colTeams, croTeams,zelTeams,afgTeams,bosTeams,norTeams,itaTeams,denTeams,swiTeams,gerTeams,sinTeams,chlTeams,libTeams,uaeTeams,safTeams,armTeams,venTeams,vieTeams,zimTeams,morTeams,tonTeams,inoTeams,ethTeams,parTeams,panTeams,parTeams,lesTeams,barTeams,sokTeams
-    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams
+    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams, papTeams,saiTeams
 
     def fetch_teams(url, team_list, pageNum=None):
         if pageNum is not None:
@@ -308,13 +310,13 @@ def getTeams():
         "montana": mtTeams, "mt": mtTeams,"nebraska": RneTeams, "ne": RneTeams,"nevada": nvTeams, "nv": nvTeams,"new mexico": nmTeams, "nm": nmTeams,"new york": nyTeams, "ny": nyTeams,"north dakota": ndTeams, "nd": ndTeams,"ohio": ohTeams, "oh": ohTeams,"oklahoma": okTeams, "ok": okTeams,
         "pennsylvania": paTeams, "pa": paTeams,"south dakota": sdTeams, "sd": sdTeams,"tennessee": tnTeams, "tn": tnTeams,"utah": utTeams, "ut": utTeams,"west virginia": wvTeams, "wv": wvTeams,"wisconsin": wiTeams, "wi": wiTeams,"wyoming": wyTeams, "wy": wyTeams,"puerto rico": prTeams, "pr": prTeams,
         "guam": guTeams,"texas": fitTeams, "tx": fitTeams,"new jersey": fmaTeams, "nj": fmaTeams,"delaware": fmaTeams, "de": fmaTeams,"massachusetts": neTeams, "ma": neTeams,"vermont": neTeams, "vt": neTeams,"rhode island": neTeams, "ri": neTeams,"maine": neTeams, "me": neTeams,"maryland": neTeams, 
-        "md": neTeams,"new hampshire": neTeams, "nh": neTeams,"conneticut": neTeams, "ct": neTeams,"michigan": fimTeams, "mi": fimTeams,"georgia": pchTeams, "ga": pchTeams,"south carolina": pchTeams, "sc": pchTeams,"north carolina": fncTeams, "nc": fncTeams,"oregon": pnwTeams, "or": pnwTeams,
+        "md": neTeams,"new hampshire": neTeams, "nh": neTeams,"connecticut": neTeams, "ct": neTeams,"michigan": fimTeams, "mi": fimTeams,"georgia": pchTeams, "ga": pchTeams,"south carolina": pchTeams, "sc": pchTeams,"north carolina": fncTeams, "nc": fncTeams,"oregon": pnwTeams, "or": pnwTeams,
         "washington": pnwTeams, "wa": pnwTeams,"indiana": finTeams, "in": finTeams,"virginia": chsTeams, "va": chsTeams,"israel": isrTeams,"turkey": turTeams, "türkiye": turTeams,"china": chiTeams, "cn": chiTeams,"chinese taipei": taiTeams, "taiwan": taiTeams,"australia": ausTeams,"canada": canTeams,
-        "united kingdom": ukTeams, "uk": ukTeams,"belize": belTeams,"ukraine": ukrTeams,"federated states of micronesia": micTeams,"kazakhstan": kazTeams,"czech republic": czeTeams,"gambia": gamTeams,"philippines": phiTeams,"pakistan": pakTeams,"comoros": comTeams,"serbia": serTeams,"suriname": surTeams,
+        "united kingdom": ukTeams, "uk": ukTeams, "kingdom": ukTeams,"belize": belTeams,"ukraine": ukrTeams,"federated states of micronesia": micTeams,"kazakhstan": kazTeams,"czech republic": czeTeams,"gambia": gamTeams,"philippines": phiTeams,"pakistan": pakTeams,"comoros": comTeams,"serbia": serTeams,"suriname": surTeams,
         "ecuador": ecuTeams,"botswana": botTeams,"france": fraTeams,"sweden": sweTeams,"azerbaijan": azeTeams,"romania": romTeams,"argentina": argTeams,"india": indTeams,"dominican republic": domTeams,"greece": greTeams,"bulgaria": bulTeams,"poland": polTeams,"netherlands": netTeams,
-        "mexico": mexTeams,"japan": japTeams,"brazil": braTeams,"colombia": colTeams,"croatia": croTeams,"new zealand": zelTeams,"afghanistan": afgTeams,"bosnia and herzegovina": bosTeams,"norway": norTeams,"italy": itaTeams,"denmark": denTeams,"switzerland": swiTeams,"germany": gerTeams,
+        "mexico": mexTeams,"japan": japTeams,"brazil": braTeams,"colombia": colTeams,"croatia": croTeams,"new zealand": zelTeams,"afghanistan": afgTeams,"bosnia and herzegovina": bosTeams,"bosnia-herzegovina": bosTeams,"norway": norTeams,"italy": itaTeams,"denmark": denTeams,"switzerland": swiTeams,"germany": gerTeams,
         "singapore": sinTeams,"chile": chlTeams,"libya": libTeams,"united arab emirates": uaeTeams,"south africa": safTeams,"armenia": armTeams,"venezuela": venTeams,"vietnam": vieTeams,"zimbabwe": zimTeams,"morocco": morTeams,"tonga": tonTeams,"indonesia": inoTeams,"ethiopia": ethTeams,
-        "paraguay": parTeams,"panama": panTeams,"lesotho": lesTeams,"barbados": barTeams,"south korea": sokTeams
+        "paraguay": parTeams,"panama": panTeams,"lesotho": lesTeams,"barbados": barTeams,"south korea": sokTeams,"papua new guinea": papTeams,"saint kitts and nevis": saiTeams
     }
 
     for team in regionalTeams:
@@ -328,6 +330,7 @@ def getTeams():
                 break
         else:
             otherTeams.append(team)
+
 
     # Remove teams from regionalTeams that appear in other region team lists
     all_other_teams = set(tuple(team) for team_list in state_country_map.values() for team in team_list)
