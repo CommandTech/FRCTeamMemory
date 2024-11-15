@@ -48,6 +48,7 @@ wiTeams = []
 wyTeams = []
 prTeams = []
 guTeams = []
+dcTeams = []
 otherTeams = [] #9009
 
 ausTeams = [] #Australia
@@ -139,7 +140,7 @@ team_name_mapping = {
     'msTeams': 'Mississippi', 'moTeams': 'Missouri', 'mtTeams': 'Montana', 'RneTeams': 'Nebraska', 'nvTeams': 'Nevada',
     'nmTeams': 'New Mexico', 'nyTeams': 'New York', 'ndTeams': 'North Dakota', 'ohTeams': 'Ohio', 'okTeams': 'Oklahoma',
     'paTeams': 'Pennsylvania', 'sdTeams': 'South Dakota', 'tnTeams': 'Tennessee', 'utTeams': 'Utah', 'wvTeams': 'West Virginia',
-    'wiTeams': 'Wisconsin', 'wyTeams': 'Wyoming', 'prTeams': 'Puerto Rico', 'guTeams': 'Guam', 'otherTeams': 'Other',
+    'wiTeams': 'Wisconsin', 'wyTeams': 'Wyoming', 'prTeams': 'Puerto Rico', 'guTeams': 'Guam', 'dcTeams': 'D.C.', 'otherTeams': 'Other',
     'ausTeams': 'Australia', 'braTeams': 'Brazil', 'canTeams': 'Canada', 'chiTeams': 'China', 'japTeams': 'Japan',
     'mexTeams': 'Mexico', 'turTeams': 'Türkiye', 'ukTeams': 'United Kingdom', 'netTeams': 'Netherlands', 'taiTeams': 'Chinese Taipei',
     'polTeams': 'Poland', 'bulTeams': 'Bulgaria', 'greTeams': 'Greece', 'domTeams': 'Dominican Republic', 'indTeams': 'India',
@@ -231,10 +232,10 @@ def root():
 
         if 'selected_regions' not in session:
             session['selected_regions'] = ['chsTeams', 'fimTeams', 'fitTeams', 'finTeams', 'isrTeams', 'fmaTeams', 'fncTeams','fscTeams', 'neTeams', 'ontTeams', 'pnwTeams', 'pchTeams']
-        # if 'regional' not in session:
-        session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
+        if 'regional' not in session:
+            session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
                                 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 
-                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
+                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams','dcTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
                                 'bulTeams', 'canTeams', 'chlTeams', 'chiTeams', 'colTeams', 'comTeams', 'croTeams', 'czeTeams', 'denTeams', 'domTeams', 'ecuTeams', 'ethTeams', 'fraTeams', 'gamTeams', 'gerTeams', 
                                 'greTeams', 'indTeams', 'inoTeams', 'itaTeams', 'japTeams', 'kazTeams', 'lesTeams', 'libTeams', 'manTeams', 'mexTeams', 'micTeams', 'morTeams', 'netTeams', 'norTeams', 'pakTeams', 
                                 'panTeams','papTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams','saiTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
@@ -282,7 +283,7 @@ def dark_mode():
 def getTeams():
     global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
     global ausTeams, braTeams, canTeams, chiTeams, japTeams, mexTeams, turTeams, ukTeams, netTeams, taiTeams, polTeams, bulTeams, greTeams, domTeams, indTeams, argTeams, romTeams, azeTeams, sweTeams, fraTeams, botTeams, ecuTeams, surTeams, serTeams, comTeams, pakTeams, ukrTeams, phiTeams, gamTeams, czeTeams, micTeams, kazTeams, manTeams, belTeams, colTeams, croTeams,zelTeams,afgTeams,bosTeams,norTeams,itaTeams,denTeams,swiTeams,gerTeams,sinTeams,chlTeams,libTeams,uaeTeams,safTeams,armTeams,venTeams,vieTeams,zimTeams,morTeams,tonTeams,inoTeams,ethTeams,parTeams,panTeams,parTeams,lesTeams,barTeams,sokTeams
-    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams, papTeams,saiTeams
+    global frcTeams, fimTeams, neTeams, pnwTeams, ontTeams, chsTeams, finTeams, fncTeams, pchTeams, fitTeams, fmaTeams, isrTeams, fscTeams, papTeams,saiTeams, dcTeams
 
     def fetch_teams(url, team_list, pageNum=None):
         if pageNum is not None:
@@ -321,7 +322,7 @@ def getTeams():
     regionalTeams = [team for team in frcTeams if team not in fimTeams + neTeams + pnwTeams + ontTeams + chsTeams + finTeams + fncTeams + pchTeams + fitTeams + fmaTeams + isrTeams + fscTeams]
 
     state_country_map = {
-        "alabama": alTeams, "al": alTeams, "alaska": akTeams, "ak": akTeams,"arizona": azTeams, "az": azTeams,"arkansas": arTeams, "ar": arTeams,"california": caTeams, "ca": caTeams,"colorado": coTeams, "co": coTeams,"florida": flTeams, "fl": flTeams,"hawaii": hiTeams, "hi": hiTeams,"idaho": idTeams, 
+        "alabama": alTeams, "al": alTeams, "alaska": akTeams, "ak": akTeams,"arizona": azTeams, "az": azTeams,"arkansas": arTeams, "ar": arTeams,"california": caTeams, "ca": caTeams,"colorado": coTeams, "co": coTeams, "dc": dcTeams, "district of columbia": dcTeams, "florida": flTeams, "fl": flTeams,"hawaii": hiTeams, "hi": hiTeams,"idaho": idTeams, 
         "id": idTeams,"illinois": ilTeams, "il": ilTeams,"iowa": iaTeams, "ia": iaTeams,"kansas": ksTeams, "ks": ksTeams,"kentucky": kyTeams, "ky": kyTeams,"louisiana": laTeams, "la": laTeams,"minnesota": mnTeams, "mn": mnTeams,"mississippi": msTeams, "ms": msTeams,"missouri": moTeams, "mo": moTeams,
         "montana": mtTeams, "mt": mtTeams,"nebraska": RneTeams, "ne": RneTeams,"nevada": nvTeams, "nv": nvTeams,"new mexico": nmTeams, "nm": nmTeams,"new york": nyTeams, "ny": nyTeams,"north dakota": ndTeams, "nd": ndTeams,"ohio": ohTeams, "oh": ohTeams,"oklahoma": okTeams, "ok": okTeams,
         "pennsylvania": paTeams, "pa": paTeams,"south dakota": sdTeams, "sd": sdTeams,"tennessee": tnTeams, "tn": tnTeams,"utah": utTeams, "ut": utTeams,"west virginia": wvTeams, "wv": wvTeams,"wisconsin": wiTeams, "wi": wiTeams,"wyoming": wyTeams, "wy": wyTeams,"puerto rico": prTeams, "pr": prTeams,
@@ -340,7 +341,7 @@ def getTeams():
         state = team[3].lower() if team[3] else None
         city = team[2].lower() if team[2] else None
 
-        for location in [city, state, country]:
+        for location in [state, city, country]:
             if location in state_country_map:
                 state_country_map[location].append(team)
                 break
