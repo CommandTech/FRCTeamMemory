@@ -232,7 +232,7 @@ def root():
 
         if 'selected_regions' not in session:
             session['selected_regions'] = ['chsTeams', 'fimTeams', 'fitTeams', 'finTeams', 'isrTeams', 'fmaTeams', 'fncTeams','fscTeams', 'neTeams', 'ontTeams', 'pnwTeams', 'pchTeams']
-        if 'regional' not in session:
+        if 'regional' not in session or session['regional'] == False or session['regional'] == True:
             session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
                                 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 
                                 'wiTeams', 'wyTeams', 'prTeams', 'guTeams','dcTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
@@ -258,6 +258,7 @@ def check_team():
             session['currentStreak'] += 1
         else:
             session['currentStreak'] = 0
+            checkHighScores()
 
         if session['currentStreak'] > session['highest_streak']:
             session['highest_streak'] = session['currentStreak']
@@ -352,6 +353,12 @@ def getTeams():
     # Remove teams from regionalTeams that appear in other region team lists
     all_other_teams = set(tuple(team) for team_list in state_country_map.values() for team in team_list)
     regionalTeams = [team for team in regionalTeams if tuple(team) not in all_other_teams]
+
+def checkHighScores():
+    print("test")
+    with open('leaderboards.txt','r') as file:
+        score = file.read()
+        print(score)
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():
