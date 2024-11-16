@@ -4,6 +4,8 @@ import concurrent.futures
 import random
 from datetime import datetime
 from datetime import timedelta
+import secrets
+import string
 
 app = Flask(__name__, static_folder='static')
 
@@ -189,28 +191,29 @@ def genRandomTeam():
             if team_list != [] and session['choice'] != -1:
                 team = random.choice(team_list)
                 session['curTeam'] = team[0]
-                session['curTeamName'] = team[1]
+                
+                session['curTeamInfo'] = team[1]
+                session['curTeamName'] = team[2]
                 try:
-                    session['curTeamCity'] = team[2].split(", ")[0]
+                    session['curTeamCity'] = team[3].split(", ")[0]
                 except:
-                    session['curTeamCity'] = team[2]
+                    session['curTeamCity'] = team[3]
 
                 try:
-                    session['curTeamState'] = team[2].split(", ")[1]
+                    session['curTeamState'] = team[3].split(", ")[1]
                 except:
-                    session['curTeamState'] = team[3]
+                    session['curTeamState'] = team[4]
 
-                session['curTeamCountry'] = team[4]
+                session['curTeamCountry'] = team[5]
 
         except:
             print("excepted")
             session['curTeam'] = -1
             session['curTeamName'] = "No Teams Loaded"
+            session['curTeamInfo'] = "No Info"
             session['curTeamCity'] = "No City"
             session['curTeamState'] = "No State"
             session['curTeamCountry'] = "No Country"
-        
-        
 
 @app.route('/')
 def root():
@@ -221,11 +224,15 @@ def root():
             session['hard_mode'] = False
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
-        
+        if 'id' not in session:
+            characters = string.ascii_letters + string.digits
+            session['id'] = ''.join(secrets.choice(characters) for _ in range(32))
+
         session['currentStreak'] = 0
         session['curTeam'] = 0
         session['curTeamName'] = "Teams Not Loaded Yet"
 
+        session['curTeamInfo'] = "No Info"
         session['curTeamCity'] = "No City"
         session['curTeamState'] = "No State"
         session['curTeamCountry'] = "No Country"
@@ -242,7 +249,7 @@ def root():
                                 'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
 
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
     
 @app.route('/check-team', methods=['POST'])
 def check_team():
@@ -266,7 +273,7 @@ def check_team():
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
         genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamInfo': session.get('curTeamInfo', "No Info"),'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
 
 @app.route('/script.js')
 def script():
@@ -294,7 +301,7 @@ def getTeams():
             data = response.json()
             if data:
                 for team in data:
-                    curTeam = [team['team_number'], team['nickname'], team['city'], team['state_prov'], team['country']]
+                    curTeam = [team['team_number'],team['name'], team['nickname'], team['city'], team['state_prov'], team['country']]
                     team_list.append(curTeam)
 
     urls = [
@@ -371,7 +378,7 @@ def update_teams():
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry']})
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry']})
 
 def startWeb():
     app.run(host='0.0.0.0', port=81)

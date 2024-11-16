@@ -1,6 +1,7 @@
 const submitButton = document.getElementById('submit-button');
 const textBox = document.getElementById('team-input');
 const teamName = document.getElementById('team-name');
+const teamInfo = document.getElementById('team-info');
 const teamLocation = document.getElementById('team-location');
 const currentStreak = document.getElementById('streak');
 const highestStreak = document.getElementById('highestStreak');
@@ -66,6 +67,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 teamName.style.color = prevColor;
 
                 teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
+                teamInfo.textContent = data.newTeamInfo;
 
                 isSubmitting = false;
             }, 2000); // 2000 milliseconds = 2 seconds
