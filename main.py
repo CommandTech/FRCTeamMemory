@@ -265,10 +265,10 @@ def check_team():
             session['currentStreak'] += 1
         else:
             session['currentStreak'] = 0
-            checkHighScores()
 
         if session['currentStreak'] > session['highest_streak']:
             session['highest_streak'] = session['currentStreak']
+            checkHighScores()
         
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
@@ -345,9 +345,9 @@ def getTeams():
     }
 
     for team in regionalTeams:
-        country = team[4].lower() if team[4] else None
-        state = team[3].lower() if team[3] else None
-        city = team[2].lower() if team[2] else None
+        country = team[5].lower() if team[5] else None
+        state = team[4].lower() if team[4] else None
+        city = team[3].lower() if team[3] else None
 
         for location in [state, city, country]:
             if location in state_country_map:
@@ -362,23 +362,52 @@ def getTeams():
     regionalTeams = [team for team in regionalTeams if tuple(team) not in all_other_teams]
 
 def checkHighScores():
-    print("test")
-    with open('leaderboards.txt','r') as file:
-        score = file.read()
-        print(score)
+    leaderboard = []
+
+    # Read the leaderboard from the file
+    with open('leaderboards.txt', 'r') as file:
+        for line in file:
+            id, score = line.strip().split(',')
+            leaderboard.append((id, int(score)))
+
+    # Sort the leaderboard by score in descending order and keep the top 10
+    leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+    # Check if the session's ID is already in the leaderboard
+    for i, (id, score) in enumerate(leaderboard):
+        if id == session['id']:
+            # Update the score if the session's highest streak is higher
+            if session.get('highest_streak', 0) > score:
+                leaderboard[i] = (session['id'], session.get('highest_streak', 0))
+            break
+    else:
+        # If the session's ID is not in the leaderboard, add it if the score is high enough
+        if any(session.get('highest_streak', 0) > score for _, score in leaderboard):
+            leaderboard.append((session['id'], session.get('highest_streak', 0)))
+
+    # Sort the leaderboard again and keep the top 10
+    leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+    # Write the updated leaderboard back to the file
+    with open('leaderboards.txt', 'w') as file:
+        for id, score in leaderboard:
+            file.write(f'{id},{score}\n')
+
+    print("Updated leaderboard:", leaderboard)
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():
     data = request.get_json()
     session['selected_regions'] = data['regions']
     session['regional'] = data['regional']
+    session['currentStreak'] = 0
     genRandomTeam()
     return "0"
 
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
-    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry']})
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak']})
 
 def startWeb():
     app.run(host='0.0.0.0', port=81)

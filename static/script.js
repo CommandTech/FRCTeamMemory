@@ -167,6 +167,7 @@ function reloadPage() {
             }else{
                 teamName.textContent = data.newTeamName;
             }
+            currentStreak.textContent = "Streak: " + data.streak;
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
         }
     })
