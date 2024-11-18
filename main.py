@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 import secrets
 import string
+import re
 
 app = Flask(__name__, static_folder='static')
 
@@ -206,6 +207,10 @@ def genRandomTeam():
 
                 session['curTeamCountry'] = team[5]
 
+
+            if re.search(r'team \d{1,4}', session['curTeamInfo'].lower()):
+                session['curTeamInfo'] = "No Info"
+                
         except:
             print("excepted")
             session['curTeam'] = -1
@@ -228,6 +233,7 @@ def root():
             characters = string.ascii_letters + string.digits
             session['id'] = ''.join(secrets.choice(characters) for _ in range(32))
 
+        session['guessedTeams'] = []
         session['currentStreak'] = 0
         session['curTeam'] = 0
         session['curTeamName'] = "Teams Not Loaded Yet"
@@ -262,9 +268,12 @@ def check_team():
     with app.app_context():
         match = teamNumber == session.get('curTeam',0)
         if (match and teamNumber != -1):
-            session['currentStreak'] += 1
+            if teamNumber not in session['guessedTeams']:
+                session['currentStreak'] += 1
+                session['guessedTeams'] = session.get('guessedTeams', []) + [session['curTeam']]
         else:
             session['currentStreak'] = 0
+            session['guessedTeams'] = []
 
         if session['currentStreak'] > session['highest_streak']:
             session['highest_streak'] = session['currentStreak']
@@ -401,12 +410,14 @@ def update_teams():
     session['selected_regions'] = data['regions']
     session['regional'] = data['regional']
     session['currentStreak'] = 0
+    session['guessedTeams'] = []
     genRandomTeam()
     return "0"
 
 @app.route('/gen-random-team', methods=['POST'])
 def gen_random_team_route():
     genRandomTeam()
+
     return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak']})
 
 def startWeb():

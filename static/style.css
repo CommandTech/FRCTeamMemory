@@ -53,8 +53,8 @@ body {
 }
 
 #team-name {
-    margin-bottom: 200px;
-    font-size: 6em; /* Increase font size for team-name */
+    margin-bottom: 100px;
+    font-size: 5em; /* Increase font size for team-name */
 }
 
 #team-input {

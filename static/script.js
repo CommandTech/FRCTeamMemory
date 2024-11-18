@@ -169,6 +169,8 @@ function reloadPage() {
             }
             currentStreak.textContent = "Streak: " + data.streak;
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
+            
+            teamInfo.textContent = data.newTeamInfo;
         }
     })
     .catch(error => console.error('Error:', error));
