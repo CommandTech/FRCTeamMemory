@@ -274,10 +274,10 @@ def check_team():
         else:
             session['currentStreak'] = 0
             session['guessedTeams'] = []
+            checkHighScores()
 
         if session['currentStreak'] > session['highest_streak']:
             session['highest_streak'] = session['currentStreak']
-            checkHighScores()
         
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
