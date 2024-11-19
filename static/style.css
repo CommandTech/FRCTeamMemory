@@ -165,11 +165,6 @@ input:checked + .slider:before {
     font-size: 1em; /* Reduce font size for smaller button */
 }
 
-.sidebar-visible #filterButton {
-    left: 350px; /* Adjust this value based on the width of the sidebar */
-}
-
-
 #leaderboardButton {
     position: absolute;
     bottom: 10px; /* Position the button 10px from the bottom */
@@ -182,7 +177,7 @@ input:checked + .slider:before {
     position: fixed;
     top: 0;
     right: -300px; /* Initially hidden off-screen */
-    width: 300px;
+    width: 450px;
     height: 100%;
     background-color: #f0f0f0;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
@@ -194,10 +189,22 @@ input:checked + .slider:before {
 }
 
 .leaderboard-visible #leaderboardButton {
-    right: 350px; /* Adjust this value based on the width of the leaderboard */
+    right: 500px; /* Adjust this value based on the width of the leaderboard */
 }
 
 body.dark-mode .leaderboard {
     background-color: #343333; /* Dark mode background */
     color: #fff; /* Dark mode text color */
+}
+
+.hamburger-icon {
+    position: absolute;
+    bottom: 10px; /* Position the button 10px from the bottom */
+    left: 10px; /* Position the button 10px from the left */
+    padding: 10px;
+    font-size: 24px; /* Increase font size for the hamburger icon */
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 50px;
 }

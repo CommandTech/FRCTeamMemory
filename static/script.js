@@ -212,10 +212,25 @@ document.getElementById('filterButton').addEventListener('click', function() {
 document.getElementById('leaderboardButton').addEventListener('click', function() {
     var leaderboard = document.getElementById('leaderboard');
     var body = document.body;
+
     if (leaderboard.classList.contains('hidden')) {
-        leaderboard.classList.remove('hidden');
-        leaderboard.classList.add('visible');
-        body.classList.add('leaderboard-visible');
+        fetch('/get-leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                const leaderboardList = leaderboard.querySelector('ul');
+                leaderboardList.innerHTML = ''; // Clear the current leaderboard
+
+                data.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item[0]}: ${item[1]}`;
+                    leaderboardList.appendChild(listItem);
+                });
+
+                leaderboard.classList.remove('hidden');
+                leaderboard.classList.add('visible');
+                body.classList.add('leaderboard-visible');
+            })
+            .catch(error => console.error('Error fetching leaderboard:', error));
     } else {
         leaderboard.classList.remove('visible');
         leaderboard.classList.add('hidden');
@@ -224,23 +239,46 @@ document.getElementById('leaderboardButton').addEventListener('click', function(
 });
 
 
-function setName(){
+function setName() {
     const usernameInput = document.getElementById('username-input');
-    const username = usernameInput.value.trim();
-    
+    const newUsername = usernameInput.value.trim();
+
     fetch('/set-username', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            name: username
+            newName: newUsername
         })
     })
     .then(response => response.json())
     .then(data => {
-        usernameInput.value = "";
+        if (data.status === 'success') {
+            sessionStorage.setItem('username', newUsername);
+            usernameInput.value = "";
+        } else {
+            console.error('Error:', data.message);
+        }
+
+        fetch('/get-leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                const leaderboardList = leaderboard.querySelector('ul');
+                leaderboardList.innerHTML = ''; // Clear the current leaderboard
+
+                data.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item[0]}: ${item[1]}`;
+                    leaderboardList.appendChild(listItem);
+                });
+
+                leaderboard.classList.remove('hidden');
+                leaderboard.classList.add('visible');
+                body.classList.add('leaderboard-visible');
+            })
     })
+    .catch(error => console.error('Error:', error));
 }
 
 usernameButton.addEventListener('click', (event) => {

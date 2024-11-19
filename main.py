@@ -274,6 +274,25 @@ def is_id_in_file(id_to_check):
             return id_to_check in ids
     except FileNotFoundError:
         return False
+    
+@app.route('/get-leaderboard', methods=['GET'])
+def get_leaderboard():
+    leaderboard = checkHighScores()
+    leaderboard_with_names = []
+
+    for session_id, score in leaderboard:
+        username = get_username_by_session_id(session_id)
+        leaderboard_with_names.append((username, score))
+
+    return jsonify(leaderboard_with_names)
+
+def get_username_by_session_id(session_id):
+    # This function should retrieve the username associated with the session ID
+    # For simplicity, we'll assume the username is stored in the session
+    # In a real application, you might need to store this mapping in a database
+    if session.get('id') == session_id:
+        return session.get('username', 'Unknown')
+    return 'Unknown'
 
 @app.route('/check-team', methods=['POST'])
 def check_team():
@@ -318,8 +337,14 @@ def dark_mode():
 @app.route('/set-username', methods=['POST'])
 def set_username():
     data = request.get_json()
-    session['username'] = data['name']
-    return "0"
+    new_name = data.get('newName')
+
+    if not new_name:
+        return jsonify({'status': 'error', 'message': 'New username is required'}), 400
+
+    session['username'] = new_name
+
+    return jsonify({'status': 'success'})
 
 def getTeams():
     global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
@@ -402,8 +427,8 @@ def checkHighScores():
         with open('leaderboards.txt', 'r') as file:
             for line in file:
                 if line.strip():  # Check if the line is not empty
-                    name, score = line.strip().split(',')
-                    leaderboard.append((name, int(score)))
+                    session_id, score = line.strip().split(',')
+                    leaderboard.append((session_id, int(score)))
     except FileNotFoundError:
         # Handle the case where the file does not exist
         open('leaderboards.txt', 'w').close()  # Create an empty file
@@ -412,22 +437,22 @@ def checkHighScores():
     leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
     # Check if the session's ID is already in the leaderboard
-    session_name = session.get('name')
-    if session_name:
-        for i, (name, score) in enumerate(leaderboard):
-            if name == session_name:
+    session_id = session.get('id')
+    if session_id:
+        for i, (sid, score) in enumerate(leaderboard):
+            if sid == session_id:
                 # Update the score if the session's ID is already in the leaderboard
-                leaderboard[i] = (name, max(score, session['highest_streak']))
+                leaderboard[i] = (sid, max(score, session['highest_streak']))
                 break
         else:
             # Add the session's ID to the leaderboard if it's not already there
-            leaderboard.append((session_name, session['highest_streak']))
+            leaderboard.append((session_id, session['highest_streak']))
             leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
     # Write the updated leaderboard back to the file
     with open('leaderboards.txt', 'w') as file:
-        for name, score in leaderboard:
-            file.write(f"{name},{score}\n")
+        for sid, score in leaderboard:
+            file.write(f"{sid},{score}\n")
 
     return leaderboard
 
