@@ -218,6 +218,10 @@ body.dark-mode .leaderboard {
     width: 50px;
 }
 
+body.dark-mode #filterButton {
+    color: white; /* Change color to white in dark mode */
+}
+
 .crown-icon {
     position: absolute;
     top: 70px; /* Adjust this value to position the button */

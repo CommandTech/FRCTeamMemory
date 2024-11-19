@@ -220,62 +220,13 @@ def genRandomTeam():
             session['curTeamState'] = "No State"
             session['curTeamCountry'] = "No Country"
 
-@app.route('/')
-def root():
-    with app.app_context():
-        ip_address = request.remote_addr
-
-        if 'id' not in session or not is_id_in_file(session['id']):
-            session_id, username, highest_streak = get_session_data_by_ip(ip_address)
-            if session_id:
-                session['id'] = session_id
-                session['username'] = username
-                session['highest_streak'] = highest_streak
-            else:
-                session['id'] = generate_unique_session_id(ip_address)
-                session['username'] = 'User-' + session['id']
-                session['highest_streak'] = 0
-
-        if 'dark_mode' not in session:
-            session['dark_mode'] = False
-        if 'hard_mode' not in session:
-            session['hard_mode'] = False
-        if 'highest_streak' not in session:
-            session['highest_streak'] = 0
-        if 'username' not in session:
-            session['username'] = 'User-' + session['id']
-        
-        session['guessedTeams'] = []
-        session['currentStreak'] = 0
-        session['curTeam'] = 0
-        session['curTeamName'] = "Teams Not Loaded Yet"
-
-        session['curTeamInfo'] = "No Info"
-        session['curTeamCity'] = "No City"
-        session['curTeamState'] = "No State"
-        session['curTeamCountry'] = "No Country"
-
-        if 'selected_regions' not in session:
-            session['selected_regions'] = ['chsTeams', 'fimTeams', 'fitTeams', 'finTeams', 'isrTeams', 'fmaTeams', 'fncTeams','fscTeams', 'neTeams', 'ontTeams', 'pnwTeams', 'pchTeams']
-        if 'regional' not in session or session['regional'] == False or session['regional'] == True:
-            session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
-                                'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 
-                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams','dcTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
-                                'bulTeams', 'canTeams', 'chlTeams', 'chiTeams', 'colTeams', 'comTeams', 'croTeams', 'czeTeams', 'denTeams', 'domTeams', 'ecuTeams', 'ethTeams', 'fraTeams', 'gamTeams', 'gerTeams', 
-                                'greTeams', 'indTeams', 'inoTeams', 'itaTeams', 'japTeams', 'kazTeams', 'lesTeams', 'libTeams', 'manTeams', 'mexTeams', 'micTeams', 'morTeams', 'netTeams', 'norTeams', 'pakTeams', 
-                                'panTeams','papTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams','saiTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
-                                'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
-
-        genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
-
 def generate_unique_session_id(ip_address):
     characters = string.ascii_letters + string.digits
     while True:
         new_id = ''.join(secrets.choice(characters) for _ in range(32))
         if not is_id_in_file(new_id):
             with open('ids.txt', 'a') as f:
-                f.write(f"{new_id},User-{new_id},{ip_address}\n")
+                f.write(f"{new_id},User-{new_id},{ip_address},0\n")
             return new_id
 
 def is_id_in_file(id_to_check):
@@ -286,14 +237,31 @@ def is_id_in_file(id_to_check):
     except FileNotFoundError:
         return False
 
+def update_ip_address_if_changed(session_id, new_ip_address):
+    ids = []
+    try:
+        with open('ids.txt', 'r') as file:
+            ids = file.readlines()
+    except FileNotFoundError:
+        pass
+
+    with open('ids.txt', 'w') as file:
+        for line in ids:
+            parts = line.strip().split(',')
+            if parts[0] == session_id:
+                if parts[2] != new_ip_address:
+                    parts[2] = new_ip_address
+                file.write(','.join(parts) + '\n')
+            else:
+                file.write(line)
+
 def get_session_data_by_ip(ip_address):
     try:
         with open('ids.txt', 'r') as file:
             for line in file:
-                session_id, username, ip = line.strip().split(',')
+                session_id, username, ip, highest_streak = line.strip().split(',')
                 if ip == ip_address:
-                    highest_streak = get_highest_streak_by_session_id(session_id)
-                    return session_id, username, highest_streak
+                    return session_id, username, int(highest_streak)
     except FileNotFoundError:
         pass
     return None, None, 0
@@ -309,17 +277,6 @@ def get_highest_streak_by_session_id(session_id):
         pass
     return 0
 
-@app.route('/get-leaderboard', methods=['GET'])
-def get_leaderboard():
-    leaderboard = checkHighScores()
-    leaderboard_with_names = []
-
-    for session_id, score in leaderboard:
-        username = get_username_by_session_id(session_id)
-        leaderboard_with_names.append((username, score))
-
-    return jsonify(leaderboard_with_names)
-
 def get_username_by_session_id(session_id):
     # This function should retrieve the username associated with the session ID
     # For simplicity, we'll assume the username is stored in the session
@@ -328,73 +285,8 @@ def get_username_by_session_id(session_id):
         return session.get('username', 'Unknown')
     return 'Unknown'
 
-@app.route('/check-team', methods=['POST'])
-def check_team():
-    data = request.get_json()
-    try:
-        teamNumber = int(data['teamNumber'])
-    except:
-        teamNumber = -1
-    
-    with app.app_context():
-        match = teamNumber == session.get('curTeam',0)
-        if (match and teamNumber != -1):
-            if teamNumber not in session['guessedTeams']:
-                session['currentStreak'] += 1
-                session['guessedTeams'] = session.get('guessedTeams', []) + [session['curTeam']]
-        else:
-            session['currentStreak'] = 0
-            session['guessedTeams'] = []
-            checkHighScores()
-
-        if session['currentStreak'] > session['highest_streak']:
-            session['highest_streak'] = session['currentStreak']
-        
-        correctTeamName = session.get('curTeamName',0)
-        correctTeamNumber = session.get('curTeam',0)
-        genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamInfo': session.get('curTeamInfo', "No Info"),'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
-
-@app.route('/script.js')
-def script():
-    return send_from_directory('', 'static/script.js')
-
-@app.route('/style.css')
-def styleSecond():
-    return send_from_directory('', 'static/style.css')
-
-@app.route('/dark-mode')
-def dark_mode():
-    session['dark_mode'] = not session.get('dark_mode', False)
-    return "0"
-
-@app.route('/set-username', methods=['POST'])
-def set_username():
-    data = request.get_json()
-    new_name = data.get('newName')
-    session_id = session.get('id')
-
-    if not new_name:
-        return jsonify({'status': 'error', 'message': 'New username is required'}), 400
-
-    session['username'] = new_name
-
-    # Update the username in ids.txt
-    ids = []
-    try:
-        with open('ids.txt', 'r') as file:
-            ids = file.readlines()
-    except FileNotFoundError:
-        pass
-
-    with open('ids.txt', 'w') as file:
-        for line in ids:
-            if line.startswith(session_id):
-                file.write(f"{session_id},{new_name},{line.split(',')[2]}\n")
-            else:
-                file.write(line)
-
-    return jsonify({'status': 'success'})
+def startWeb():
+    app.run(host='0.0.0.0', port=81)
 
 def get_username_by_session_id(session_id):
     try:
@@ -514,7 +406,92 @@ def checkHighScores():
         for sid, score in leaderboard:
             file.write(f"{sid},{score}\n")
 
+    # Update the highest streak in ids.txt
+    ids = []
+    try:
+        with open('ids.txt', 'r') as file:
+            ids = file.readlines()
+    except FileNotFoundError:
+        pass
+
+    with open('ids.txt', 'w') as file:
+        for line in ids:
+            if line.startswith(session_id):
+                parts = line.strip().split(',')
+                file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']}\n")
+            else:
+                file.write(line)
+
     return leaderboard
+
+
+
+
+
+@app.route('/')
+def root():
+    with app.app_context():
+        ip_address = request.remote_addr
+
+        if 'id' not in session:
+            session_id, username, highest_streak = get_session_data_by_ip(ip_address)
+            if session_id:
+                session['id'] = session_id
+                session['username'] = username
+                session['highest_streak'] = highest_streak
+            else:
+                session['id'] = generate_unique_session_id(ip_address)
+                session['username'] = 'User-' + session['id']
+                session['highest_streak'] = 0
+        else:
+            session_id = session['id']
+            update_ip_address_if_changed(session_id, ip_address)
+
+        if 'dark_mode' not in session:
+            session['dark_mode'] = False
+        if 'hard_mode' not in session:
+            session['hard_mode'] = False
+        if 'highest_streak' not in session:
+            session['highest_streak'] = 0
+        if 'username' not in session:
+            session['username'] = 'User-' + session['id']
+        
+        session['guessedTeams'] = []
+        session['currentStreak'] = 0
+        session['curTeam'] = 0
+        session['curTeamName'] = "Teams Not Loaded Yet"
+
+        session['curTeamInfo'] = "No Info"
+        session['curTeamCity'] = "No City"
+        session['curTeamState'] = "No State"
+        session['curTeamCountry'] = "No Country"
+
+        if 'selected_regions' not in session:
+            session['selected_regions'] = ['chsTeams', 'fimTeams', 'fitTeams', 'finTeams', 'isrTeams', 'fmaTeams', 'fncTeams','fscTeams', 'neTeams', 'ontTeams', 'pnwTeams', 'pchTeams']
+        if 'regional' not in session or session['regional'] == False or session['regional'] == True:
+            session['regional'] = ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 
+                                'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 
+                                'wiTeams', 'wyTeams', 'prTeams', 'guTeams','dcTeams', 'otherTeams', 'afgTeams', 'argTeams', 'armTeams', 'ausTeams', 'azeTeams', 'barTeams', 'belTeams', 'bosTeams', 'botTeams', 'braTeams', 
+                                'bulTeams', 'canTeams', 'chlTeams', 'chiTeams', 'colTeams', 'comTeams', 'croTeams', 'czeTeams', 'denTeams', 'domTeams', 'ecuTeams', 'ethTeams', 'fraTeams', 'gamTeams', 'gerTeams', 
+                                'greTeams', 'indTeams', 'inoTeams', 'itaTeams', 'japTeams', 'kazTeams', 'lesTeams', 'libTeams', 'manTeams', 'mexTeams', 'micTeams', 'morTeams', 'netTeams', 'norTeams', 'pakTeams', 
+                                'panTeams','papTeams', 'parTeams', 'phiTeams', 'polTeams', 'romTeams', 'safTeams','saiTeams', 'serTeams', 'sinTeams', 'sokTeams', 'surTeams', 'sweTeams', 'swiTeams', 'taiTeams', 'tonTeams', 'turTeams', 
+                                'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
+
+        genRandomTeam()
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
+
+@app.route('/script.js')
+def script():
+    return send_from_directory('', 'static/script.js')
+
+@app.route('/style.css')
+def styleSecond():
+    return send_from_directory('', 'static/style.css')
+
+@app.route('/dark-mode')
+def dark_mode():
+    session['dark_mode'] = not session.get('dark_mode', False)
+    return "0"
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():
@@ -532,9 +509,72 @@ def gen_random_team_route():
 
     return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak']})
 
-def startWeb():
-    app.run(host='0.0.0.0', port=81)
+@app.route('/set-username', methods=['POST'])
+def set_username():
+    data = request.get_json()
+    new_name = data.get('newName')
+    session_id = session.get('id')
 
+    if not new_name:
+        return jsonify({'status': 'error', 'message': 'New username is required'}), 400
+
+    session['username'] = new_name
+
+    # Update the username and highest streak in ids.txt
+    ids = []
+    try:
+        with open('ids.txt', 'r') as file:
+            ids = file.readlines()
+    except FileNotFoundError:
+        pass
+
+    with open('ids.txt', 'w') as file:
+        for line in ids:
+            if line.startswith(session_id):
+                parts = line.strip().split(',')
+                file.write(f"{session_id},{new_name},{parts[2]},{session['highest_streak']}\n")
+            else:
+                file.write(line)
+
+    return jsonify({'status': 'success'})
+
+@app.route('/check-team', methods=['POST'])
+def check_team():
+    data = request.get_json()
+    try:
+        teamNumber = int(data['teamNumber'])
+    except:
+        teamNumber = -1
+    
+    with app.app_context():
+        match = teamNumber == session.get('curTeam',0)
+        if (match and teamNumber != -1):
+            if teamNumber not in session['guessedTeams']:
+                session['currentStreak'] += 1
+                session['guessedTeams'] = session.get('guessedTeams', []) + [session['curTeam']]
+        else:
+            session['currentStreak'] = 0
+            session['guessedTeams'] = []
+            checkHighScores()
+
+        if session['currentStreak'] > session['highest_streak']:
+            session['highest_streak'] = session['currentStreak']
+        
+        correctTeamName = session.get('curTeamName',0)
+        correctTeamNumber = session.get('curTeam',0)
+        genRandomTeam()
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamInfo': session.get('curTeamInfo', "No Info"),'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
+
+@app.route('/get-leaderboard', methods=['GET'])
+def get_leaderboard():
+    leaderboard = checkHighScores()
+    leaderboard_with_names = []
+
+    for session_id, score in leaderboard:
+        username = get_username_by_session_id(session_id)
+        leaderboard_with_names.append((username, score))
+
+    return jsonify(leaderboard_with_names)
 
 if __name__ == '__main__':
     getTeams()
