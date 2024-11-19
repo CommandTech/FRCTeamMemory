@@ -223,14 +223,25 @@ def genRandomTeam():
 @app.route('/')
 def root():
     with app.app_context():
+        ip_address = request.remote_addr
+
+        if 'id' not in session or not is_id_in_file(session['id']):
+            session_id, username, highest_streak = get_session_data_by_ip(ip_address)
+            if session_id:
+                session['id'] = session_id
+                session['username'] = username
+                session['highest_streak'] = highest_streak
+            else:
+                session['id'] = generate_unique_session_id(ip_address)
+                session['username'] = 'User-' + session['id']
+                session['highest_streak'] = 0
+
         if 'dark_mode' not in session:
             session['dark_mode'] = False
         if 'hard_mode' not in session:
             session['hard_mode'] = False
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
-        if 'id' not in session or not is_id_in_file(session['id']):
-            session['id'] = generate_unique_session_id()
         if 'username' not in session:
             session['username'] = 'User-' + session['id']
         
@@ -258,13 +269,13 @@ def root():
         genRandomTeam()
         return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
 
-def generate_unique_session_id():
+def generate_unique_session_id(ip_address):
     characters = string.ascii_letters + string.digits
     while True:
         new_id = ''.join(secrets.choice(characters) for _ in range(32))
         if not is_id_in_file(new_id):
             with open('ids.txt', 'a') as f:
-                f.write(f"{new_id},User-{new_id}\n")
+                f.write(f"{new_id},User-{new_id},{ip_address}\n")
             return new_id
 
 def is_id_in_file(id_to_check):
@@ -274,7 +285,30 @@ def is_id_in_file(id_to_check):
             return any(id_to_check in line for line in ids)
     except FileNotFoundError:
         return False
-    
+
+def get_session_data_by_ip(ip_address):
+    try:
+        with open('ids.txt', 'r') as file:
+            for line in file:
+                session_id, username, ip = line.strip().split(',')
+                if ip == ip_address:
+                    highest_streak = get_highest_streak_by_session_id(session_id)
+                    return session_id, username, highest_streak
+    except FileNotFoundError:
+        pass
+    return None, None, 0
+
+def get_highest_streak_by_session_id(session_id):
+    try:
+        with open('leaderboards.txt', 'r') as file:
+            for line in file:
+                sid, score = line.strip().split(',')
+                if sid == session_id:
+                    return int(score)
+    except FileNotFoundError:
+        pass
+    return 0
+
 @app.route('/get-leaderboard', methods=['GET'])
 def get_leaderboard():
     leaderboard = checkHighScores()
@@ -356,7 +390,7 @@ def set_username():
     with open('ids.txt', 'w') as file:
         for line in ids:
             if line.startswith(session_id):
-                file.write(f"{session_id},{new_name}\n")
+                file.write(f"{session_id},{new_name},{line.split(',')[2]}\n")
             else:
                 file.write(line)
 

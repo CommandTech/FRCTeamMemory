@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRC Memory</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="{{ 'dark-mode' if dark_mode else '' }}">
     <div class="switch-container">
@@ -51,7 +52,6 @@
             <label><input type="checkbox" id="pnwTeams" {% if 'pnwTeams' in selected_regions %}checked{% endif %}> Pacific Northwest</label><br>
             <label><input type="checkbox" id="pchTeams" {% if 'pchTeams' in selected_regions %}checked{% endif %}> Peachtree</label><br>
         </div>
-        <button id="filterButton"class="hamburger-icon">&#9776;</button>
 
         <div class="form-container" id="first-page">
             <h1 class="team-name" id="team-name">{{team}}</h1>
@@ -65,7 +65,10 @@
             </div>
         </div>
 
-        <button id="leaderboardButton">Leaderboard</button>
+        <button id="filterButton"class="hamburger-icon">&#9776;</button>
+
+        <!-- <button id="leaderboardButton">Leaderboard</button> -->
+        <button id="leaderboardButton" class="crown-icon"><i class="fas fa-crown"></i></button>
         <div class="leaderboard hidden" id="leaderboard">
             <h2>Leaderboard</h2>
             <input type="text" id="username-input" placeholder="Username">

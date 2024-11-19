@@ -159,15 +159,24 @@ input:checked + .slider:before {
 
 #filterButton {
     position: absolute;
-    bottom: 10px; /* Position the button 10px from the bottom */
+    top: -1250px; /* Position the button 10px from the top */
     left: 10px; /* Position the button 10px from the left */
-    padding: 5px 10px; /* Reduce padding for smaller button */
-    font-size: 1em; /* Reduce font size for smaller button */
+    padding: 10px; /* Adjust padding for the button */
+    font-size: 40px; /* Increase font size for the hamburger icon */
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block; /* Ensure the button respects width and padding */
 }
+
+.sidebar-visible #filterButton {
+    left: 350px; /* Adjust this value based on the width of the sidebar */
+}
+
 
 #leaderboardButton {
     position: absolute;
-    bottom: 10px; /* Position the button 10px from the bottom */
+    top: 50px; /* Position the button 10px from the bottom */
     right: 10px; /* Position the button 10px from the right */
     padding: 5px 10px; /* Reduce padding for smaller button */
     font-size: 1em; /* Reduce font size for smaller button */
@@ -175,7 +184,7 @@ input:checked + .slider:before {
 
 .leaderboard {
     position: fixed;
-    top: 0;
+    top: 20px;
     right: -300px; /* Initially hidden off-screen */
     width: 450px;
     height: 100%;
@@ -199,12 +208,28 @@ body.dark-mode .leaderboard {
 
 .hamburger-icon {
     position: absolute;
-    bottom: 10px; /* Position the button 10px from the bottom */
-    left: 10px; /* Position the button 10px from the left */
+    bottom: 10px;
+    left: 10px;
     padding: 10px;
-    font-size: 24px; /* Increase font size for the hamburger icon */
+    font-size: 24px;
     background: none;
     border: none;
     cursor: pointer;
     width: 50px;
+}
+
+.crown-icon {
+    position: absolute;
+    top: 70px; /* Adjust this value to position the button */
+    right: 10px; /* Position the button 10px from the right */
+    padding: 10px; /* Adjust padding for the button */
+    font-size: 24px; /* Increase font size for the icon */
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #FFD700; /* Gold color for the crown */
+}
+
+.crown-icon i {
+    font-size: 34px; /* Adjust the size of the icon */
 }
