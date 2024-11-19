@@ -152,3 +152,52 @@ input:checked + .slider:before {
     top: 10px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
 }
+
+.hidden {
+    display: none;
+}
+
+#filterButton {
+    position: absolute;
+    bottom: 10px; /* Position the button 10px from the bottom */
+    left: 10px; /* Position the button 10px from the left */
+    padding: 5px 10px; /* Reduce padding for smaller button */
+    font-size: 1em; /* Reduce font size for smaller button */
+}
+
+.sidebar-visible #filterButton {
+    left: 350px; /* Adjust this value based on the width of the sidebar */
+}
+
+
+#leaderboardButton {
+    position: absolute;
+    bottom: 10px; /* Position the button 10px from the bottom */
+    right: 10px; /* Position the button 10px from the right */
+    padding: 5px 10px; /* Reduce padding for smaller button */
+    font-size: 1em; /* Reduce font size for smaller button */
+}
+
+.leaderboard {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Initially hidden off-screen */
+    width: 300px;
+    height: 100%;
+    background-color: #f0f0f0;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.leaderboard.visible {
+    right: 0; /* Slide in from the right */
+}
+
+.leaderboard-visible #leaderboardButton {
+    right: 350px; /* Adjust this value based on the width of the leaderboard */
+}
+
+body.dark-mode .leaderboard {
+    background-color: #343333; /* Dark mode background */
+    color: #fff; /* Dark mode text color */
+}

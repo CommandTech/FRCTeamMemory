@@ -1,4 +1,5 @@
 const submitButton = document.getElementById('submit-button');
+const usernameButton = document.getElementById('submit-username');
 const textBox = document.getElementById('team-input');
 const teamName = document.getElementById('team-name');
 const teamInfo = document.getElementById('team-info');
@@ -169,7 +170,7 @@ function reloadPage() {
             }
             currentStreak.textContent = "Streak: " + data.streak;
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
-            
+
             teamInfo.textContent = data.newTeamInfo;
         }
     })
@@ -184,4 +185,72 @@ document.getElementById('darkModeSwitch').addEventListener('change', function() 
 document.getElementById('hardModeSwitch').addEventListener('change', function() {
     hardMode = !hardMode;
     reloadPage();
+});
+
+document.getElementById('team-input').addEventListener('input', function (e) {
+    if (this.value.length > 5) {
+        this.value = this.value.slice(0, 5);
+    }
+    let value = this.value;
+    if (isNaN(parseInt(value))) {
+        this.value = value.slice(0, -1);
+    }
+});
+
+document.getElementById('filterButton').addEventListener('click', function() {
+    var sidebar = document.getElementById('sidebar');
+    var body = document.body;
+    if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+        body.classList.add('sidebar-visible');
+    } else {
+        sidebar.classList.add('hidden');
+        body.classList.remove('sidebar-visible');
+    }
+});
+
+document.getElementById('leaderboardButton').addEventListener('click', function() {
+    var leaderboard = document.getElementById('leaderboard');
+    var body = document.body;
+    if (leaderboard.classList.contains('hidden')) {
+        leaderboard.classList.remove('hidden');
+        leaderboard.classList.add('visible');
+        body.classList.add('leaderboard-visible');
+    } else {
+        leaderboard.classList.remove('visible');
+        leaderboard.classList.add('hidden');
+        body.classList.remove('leaderboard-visible');
+    }
+});
+
+
+function setName(){
+    const usernameInput = document.getElementById('username-input');
+    const username = usernameInput.value.trim();
+    
+    fetch('/set-username', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: username
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        usernameInput.value = "";
+    })
+}
+
+usernameButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    setName();
+});
+
+usernameButton.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        setName();
+    }
 });

@@ -229,10 +229,11 @@ def root():
             session['hard_mode'] = False
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
-        if 'id' not in session:
-            characters = string.ascii_letters + string.digits
-            session['id'] = ''.join(secrets.choice(characters) for _ in range(32))
-
+        if 'id' not in session or not is_id_in_file(session['id']):
+            session['id'] = generate_unique_session_id()
+        if 'username' not in session:
+            session['username'] = 'User-' + session['id']
+        
         session['guessedTeams'] = []
         session['currentStreak'] = 0
         session['curTeam'] = 0
@@ -256,7 +257,24 @@ def root():
 
         genRandomTeam()
         return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
-    
+
+def generate_unique_session_id():
+    characters = string.ascii_letters + string.digits
+    while True:
+        new_id = ''.join(secrets.choice(characters) for _ in range(32))
+        if not is_id_in_file(new_id):
+            with open('ids.txt', 'a') as f:
+                f.write(new_id + '\n')
+            return new_id
+
+def is_id_in_file(id_to_check):
+    try:
+        with open('ids.txt', 'r') as f:
+            ids = f.read().splitlines()
+            return id_to_check in ids
+    except FileNotFoundError:
+        return False
+
 @app.route('/check-team', methods=['POST'])
 def check_team():
     data = request.get_json()
@@ -295,6 +313,12 @@ def styleSecond():
 @app.route('/dark-mode')
 def dark_mode():
     session['dark_mode'] = not session.get('dark_mode', False)
+    return "0"
+
+@app.route('/set-username', methods=['POST'])
+def set_username():
+    data = request.get_json()
+    session['username'] = data['name']
     return "0"
 
 def getTeams():
@@ -374,35 +398,38 @@ def checkHighScores():
     leaderboard = []
 
     # Read the leaderboard from the file
-    with open('leaderboards.txt', 'r') as file:
-        for line in file:
-            id, score = line.strip().split(',')
-            leaderboard.append((id, int(score)))
+    try:
+        with open('leaderboards.txt', 'r') as file:
+            for line in file:
+                if line.strip():  # Check if the line is not empty
+                    name, score = line.strip().split(',')
+                    leaderboard.append((name, int(score)))
+    except FileNotFoundError:
+        # Handle the case where the file does not exist
+        open('leaderboards.txt', 'w').close()  # Create an empty file
 
     # Sort the leaderboard by score in descending order and keep the top 10
     leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
     # Check if the session's ID is already in the leaderboard
-    for i, (id, score) in enumerate(leaderboard):
-        if id == session['id']:
-            # Update the score if the session's highest streak is higher
-            if session.get('highest_streak', 0) > score:
-                leaderboard[i] = (session['id'], session.get('highest_streak', 0))
-            break
-    else:
-        # If the session's ID is not in the leaderboard, add it if the score is high enough
-        if any(session.get('highest_streak', 0) > score for _, score in leaderboard):
-            leaderboard.append((session['id'], session.get('highest_streak', 0)))
-
-    # Sort the leaderboard again and keep the top 10
-    leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+    session_name = session.get('name')
+    if session_name:
+        for i, (name, score) in enumerate(leaderboard):
+            if name == session_name:
+                # Update the score if the session's ID is already in the leaderboard
+                leaderboard[i] = (name, max(score, session['highest_streak']))
+                break
+        else:
+            # Add the session's ID to the leaderboard if it's not already there
+            leaderboard.append((session_name, session['highest_streak']))
+            leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
     # Write the updated leaderboard back to the file
     with open('leaderboards.txt', 'w') as file:
-        for id, score in leaderboard:
-            file.write(f'{id},{score}\n')
+        for name, score in leaderboard:
+            file.write(f"{name},{score}\n")
 
-    print("Updated leaderboard:", leaderboard)
+    return leaderboard
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():

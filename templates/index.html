@@ -20,7 +20,7 @@
         </label>
     </div>
     <div class="main-container">
-        <div class="sidebar">
+        <div class="sidebar hidden" id="sidebar">
             <h2>United States</h2>
             <label><input type="checkbox" id="regional" {% if regional %}checked{% endif %}> Regional Teams</label><br>
             {% for team in ['alTeams', 'akTeams', 'azTeams', 'arTeams', 'caTeams', 'coTeams', 'flTeams', 'hiTeams', 'idTeams', 'ilTeams', 'iaTeams', 'ksTeams', 'kyTeams', 'laTeams', 'mnTeams', 'msTeams', 'moTeams', 'mtTeams', 'RneTeams', 'nvTeams', 'nmTeams', 'nyTeams', 'ndTeams', 'ohTeams', 'okTeams', 'paTeams', 'sdTeams', 'tnTeams', 'utTeams', 'wvTeams', 'wiTeams', 'wyTeams', 'prTeams', 'guTeams','dcTeams', 'otherTeams', 'ausTeams', 'braTeams', 'canTeams', 'chiTeams', 'japTeams', 'mexTeams', 'turTeams', 'ukTeams', 'netTeams', 'taiTeams', 'polTeams', 'bulTeams', 'greTeams', 'domTeams', 'indTeams', 'argTeams', 'romTeams', 'azeTeams', 'sweTeams', 'fraTeams', 'botTeams', 'ecuTeams', 'surTeams', 'serTeams', 'comTeams', 'pakTeams', 'ukrTeams', 'phiTeams', 'gamTeams', 'czeTeams', 'micTeams', 'kazTeams', 'manTeams', 'belTeams', 'colTeams', 'croTeams', 'zelTeams', 'afgTeams', 'bosTeams', 'norTeams', 'itaTeams', 'denTeams', 'swiTeams', 'gerTeams', 'sinTeams', 'chlTeams', 'libTeams', 'uaeTeams', 'safTeams', 'armTeams', 'venTeams', 'vieTeams', 'zimTeams', 'morTeams', 'tonTeams', 'inoTeams', 'ethTeams', 'parTeams', 'panTeams', 'lesTeams', 'barTeams', 'sokTeams', 'papTeams', 'saiTeams'] %}
@@ -51,18 +51,25 @@
             <label><input type="checkbox" id="pnwTeams" {% if 'pnwTeams' in selected_regions %}checked{% endif %}> Pacific Northwest</label><br>
             <label><input type="checkbox" id="pchTeams" {% if 'pchTeams' in selected_regions %}checked{% endif %}> Peachtree</label><br>
         </div>
-
+        <button id="filterButton">Filter</button>
 
         <div class="form-container" id="first-page">
             <h1 class="team-name" id="team-name">{{team}}</h1>
             <h2 class="team-info" id="team-info">{{info}}</h1>
             <h3 class="team-location" id="team-location">{{city}}, {{state}}, {{country}}</h3>
             <div class="centered-content">
-                <input type="text" id="team-input" placeholder="12345" maxlength="5" pattern=".{0,5}">
+                <input type="text" id="team-input" placeholder="12345" maxlength="5" pattern=".{0,5}" min ="0">
                 <button type="submit" id="submit-button">Submit</button>
                 <label id ="streak">Streak: 0</label>
                 <label id ="highestStreak">Highest Streak: {{highest_streak}}</label>
             </div>
+        </div>
+
+        <button id="leaderboardButton">Leaderboard</button>
+        <div class="leaderboard hidden" id="leaderboard">
+            <h2>Leaderboard</h2>
+            <input type="text" id="username-input" placeholder="Username">
+            <button type="submit" id="submit-username">Ok</button>
         </div>
     </div>
     <script src="script.js"></script>
