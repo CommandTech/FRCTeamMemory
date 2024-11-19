@@ -264,14 +264,14 @@ def generate_unique_session_id():
         new_id = ''.join(secrets.choice(characters) for _ in range(32))
         if not is_id_in_file(new_id):
             with open('ids.txt', 'a') as f:
-                f.write(new_id + '\n')
+                f.write(f"{new_id},User-{new_id}\n")
             return new_id
 
 def is_id_in_file(id_to_check):
     try:
         with open('ids.txt', 'r') as f:
             ids = f.read().splitlines()
-            return id_to_check in ids
+            return any(id_to_check in line for line in ids)
     except FileNotFoundError:
         return False
     
@@ -338,13 +338,39 @@ def dark_mode():
 def set_username():
     data = request.get_json()
     new_name = data.get('newName')
+    session_id = session.get('id')
 
     if not new_name:
         return jsonify({'status': 'error', 'message': 'New username is required'}), 400
 
     session['username'] = new_name
 
+    # Update the username in ids.txt
+    ids = []
+    try:
+        with open('ids.txt', 'r') as file:
+            ids = file.readlines()
+    except FileNotFoundError:
+        pass
+
+    with open('ids.txt', 'w') as file:
+        for line in ids:
+            if line.startswith(session_id):
+                file.write(f"{session_id},{new_name}\n")
+            else:
+                file.write(line)
+
     return jsonify({'status': 'success'})
+
+def get_username_by_session_id(session_id):
+    try:
+        with open('ids.txt', 'r') as file:
+            for line in file:
+                if line.startswith(session_id):
+                    return line.strip().split(',')[1]
+    except FileNotFoundError:
+        pass
+    return 'Unknown'
 
 def getTeams():
     global regionalTeams, alTeams, akTeams, azTeams,  arTeams, caTeams, coTeams, flTeams, hiTeams, idTeams, ilTeams, iaTeams, ksTeams, kyTeams, laTeams, mnTeams, msTeams, moTeams, mtTeams, RneTeams, nvTeams, nmTeams, nyTeams, ndTeams, ohTeams, okTeams, paTeams, sdTeams, tnTeams, utTeams, wvTeams, wiTeams, wyTeams, otherTeams
