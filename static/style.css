@@ -159,7 +159,7 @@ input:checked + .slider:before {
 
 #filterButton {
     position: absolute;
-    top: -1250px; /* Position the button 10px from the top */
+    top: 10px; /* Position the button 10px from the top */
     left: 10px; /* Position the button 10px from the left */
     padding: 10px; /* Adjust padding for the button */
     font-size: 40px; /* Increase font size for the hamburger icon */
