@@ -1,2 +1,2 @@
 @ECHO off
-python app.py
+python main.py
