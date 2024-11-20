@@ -446,6 +446,29 @@ def root():
             session_id = session['id']
             update_ip_address_if_changed(session_id, ip_address)
 
+                # Always check the ids.txt file for the session ID
+        session_id = session['id']
+        ids = []
+        try:
+            with open('ids.txt', 'r') as file:
+                ids = file.readlines()
+        except FileNotFoundError:
+            pass
+
+        id_exists = False
+        for line in ids:
+            parts = line.strip().split(',')
+            if parts[0] == session_id:
+                id_exists = True
+                if int(parts[3]) != session.get('highest_streak', 0):
+                    session['highest_streak'] = int(parts[3])
+                break
+
+        if not id_exists:
+            with open('ids.txt', 'a') as file:
+                file.write(f"{session_id},{session['username']},{ip_address},{session.get('highest_streak', 0)}\n")
+
+
         if 'dark_mode' not in session:
             session['dark_mode'] = False
         if 'hard_mode' not in session:
@@ -558,6 +581,48 @@ def check_team():
 
         if session['currentStreak'] > session['highest_streak']:
             session['highest_streak'] = session['currentStreak']
+
+            # Update ids.txt
+            session_id = session['id']
+            ids = []
+            try:
+                with open('ids.txt', 'r') as file:
+                    ids = file.readlines()
+            except FileNotFoundError:
+                pass
+
+            with open('ids.txt', 'w') as file:
+                for line in ids:
+                    if line.startswith(session_id):
+                        parts = line.strip().split(',')
+                        file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']}\n")
+                    else:
+                        file.write(line)
+            
+            # Update leaderboards.txt
+            leaderboard = []
+            try:
+                with open('leaderboards.txt', 'r') as file:
+                    for line in file:
+                        if line.strip():
+                            sid, score = line.strip().split(',')
+                            leaderboard.append((sid, int(score)))
+            except FileNotFoundError:
+                pass
+
+            leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+            for i, (sid, score) in enumerate(leaderboard):
+                if sid == session_id:
+                    leaderboard[i] = (sid, session['highest_streak'])
+                    break
+            else:
+                leaderboard.append((session_id, session['highest_streak']))
+                leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+            with open('leaderboards.txt', 'w') as file:
+                for sid, score in leaderboard:
+                    file.write(f"{sid},{score}\n")
         
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
