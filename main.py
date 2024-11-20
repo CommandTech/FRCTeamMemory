@@ -390,7 +390,7 @@ def checkHighScores():
 
     # Check if the session's ID is already in the leaderboard
     session_id = session.get('id')
-    if session_id:
+    if session_id and session.get('username'):  # Only add if username is set
         for i, (sid, score) in enumerate(leaderboard):
             if sid == session_id:
                 # Update the score if the session's ID is already in the leaderboard
@@ -441,7 +441,6 @@ def root():
                 session['highest_streak'] = highest_streak
             else:
                 session['id'] = generate_unique_session_id(ip_address)
-                session['username'] = 'User-' + session['id']
                 session['highest_streak'] = 0
         else:
             session_id = session['id']
@@ -454,7 +453,7 @@ def root():
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
         if 'username' not in session:
-            session['username'] = 'User-' + session['id']
+            session['username'] = None
         
         session['guessedTeams'] = []
         session['currentStreak'] = 0

@@ -243,42 +243,46 @@ function setName() {
     const usernameInput = document.getElementById('username-input');
     const newUsername = usernameInput.value.trim();
 
-    fetch('/set-username', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            newName: newUsername
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            sessionStorage.setItem('username', newUsername);
-            usernameInput.value = "";
-        } else {
-            console.error('Error:', data.message);
-        }
-
-        fetch('/get-leaderboard')
-            .then(response => response.json())
-            .then(data => {
-                const leaderboardList = leaderboard.querySelector('ul');
-                leaderboardList.innerHTML = ''; // Clear the current leaderboard
-
-                data.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${item[0]}: ${item[1]}`;
-                    leaderboardList.appendChild(listItem);
-                });
-
-                leaderboard.classList.remove('hidden');
-                leaderboard.classList.add('visible');
-                body.classList.add('leaderboard-visible');
+    if (newUsername) {
+        fetch('/set-username', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                newName: newUsername
             })
-    })
-    .catch(error => console.error('Error:', error));
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                sessionStorage.setItem('username', newUsername);
+                usernameInput.value = "";
+
+                // Fetch and display the updated leaderboard
+                fetch('/get-leaderboard')
+                    .then(response => response.json())
+                    .then(data => {
+                        const leaderboardList = document.getElementById('leaderboard').querySelector('ul');
+                        leaderboardList.innerHTML = ''; // Clear the current leaderboard
+
+                        data.forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = `${item[0]}: ${item[1]}`;
+                            leaderboardList.appendChild(listItem);
+                        });
+
+                        document.getElementById('leaderboard').classList.remove('hidden');
+                        document.getElementById('leaderboard').classList.add('visible');
+                        document.body.classList.add('leaderboard-visible');
+                    })
+                    .catch(error => console.error('Error fetching leaderboard:', error));
+            } else {
+                console.error('Error:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 }
 
 usernameButton.addEventListener('click', (event) => {
