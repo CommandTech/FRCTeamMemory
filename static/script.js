@@ -12,7 +12,7 @@ const districtCheckbox = document.getElementById('district');
 const regionCheckboxes = document.querySelectorAll('#chsTeams, #fimTeams, #fitTeams, #finTeams, #isrTeams, #fmaTeams, #fncTeams, #fscTeams, #neTeams, #ontTeams, #pnwTeams, #pchTeams');
 const regionalCheckboxes = document.querySelectorAll('#alTeams, #akTeams, #azTeams, #arTeams, #caTeams, #coTeams, #flTeams, #hiTeams, #idTeams, #ilTeams, #iaTeams, #ksTeams,#kyTeams, #laTeams, #mnTeams, #msTeams, #moTeams, #mtTeams, #RneTeams, #nvTeams, #nmTeams, #nyTeams, #ndTeams, #ohTeams, #okTeams, #paTeams, #sdTeams, #tnTeams, #utTeams, #wvTeams, #wiTeams, #wyTeams, #prTeams, #guTeams, #otherTeams, #ausTeams, #braTeams, #canTeams, #chiTeams, #japTeams, #mexTeams, #turTeams, #ukTeams, #netTeams, #taiTeams, #polTeams, #bulTeams, #greTeams, #domTeams, #indTeams, #argTeams, #romTeams, #azeTeams, #sweTeams, #fraTeams, #botTeams, #ecuTeams, #surTeams, #serTeams, #comTeams, #pakTeams, #ukrTeams, #phiTeams, #gamTeams, #czeTeams, #micTeams, #kazTeams, #manTeams, #belTeams, #colTeams, #croTeams, #zelTeams, #afgTeams, #bosTeams, #norTeams, #itaTeams, #denTeams, #swiTeams, #gerTeams, #sinTeams, #chlTeams, #libTeams, #uaeTeams, #safTeams, #armTeams, #venTeams, #vieTeams, #zimTeams, #morTeams, #tonTeams, #inoTeams, #ethTeams, #parTeams, #panTeams, #lesTeams, #barTeams, #sokTeams, #saiTeams,#papTeams,#dcTeams');
 
-var hardMode = false;
+var hardMode = document.getElementById('hardModeSwitch').checked;
 
 document.addEventListener('DOMContentLoaded', (event) => {
     let isSubmitting = false;
@@ -34,7 +34,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(data => {
             const prevColor = teamName.style.color;
             currentStreak.textContent = "Streak: " + data.streak;
-            highestStreak.textContent = "Highest Streak: " + data.highest_streak;
+            if (hardMode){
+                highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
+            }else{
+                highestStreak.textContent = "Highest Streak: " + data.highest_streak;
+            }
             if (data.match) {
                 textBox.style.color = 'green';
                 teamName.style.color = 'green';
@@ -165,8 +169,14 @@ function reloadPage() {
         if (data.status === 'success') {
             if (hardMode) {
                 teamName.textContent = "";
+                highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
             }else{
                 teamName.textContent = data.newTeamName;
+                if (hardMode){
+                    highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
+                }else{
+                    highestStreak.textContent = "Highest Streak: " + data.highest_streak;
+                }
             }
             currentStreak.textContent = "Streak: " + data.streak;
             teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
@@ -184,6 +194,7 @@ document.getElementById('darkModeSwitch').addEventListener('change', function() 
 
 document.getElementById('hardModeSwitch').addEventListener('change', function() {
     hardMode = !hardMode;
+    fetch('/hard-mode');
     reloadPage();
 });
 
@@ -217,13 +228,24 @@ document.getElementById('leaderboardButton').addEventListener('click', function(
         fetch('/get-leaderboard')
             .then(response => response.json())
             .then(data => {
-                const leaderboardList = leaderboard.querySelector('ul');
+                console.log(data[0]);
+                console.log(data[1]);
+                // const leaderboardList = leaderboard.querySelector('ul');
+                const leaderboardList = document.getElementById('leaderboardList')
+                const leaderboardHardList = document.getElementById('leaderboardListHard')
                 leaderboardList.innerHTML = ''; // Clear the current leaderboard
+                leaderboardHardList.innerHTML = ''; // Clear the current leaderboard
 
-                data.forEach(item => {
+                data[0].forEach(item => {
                     const listItem = document.createElement('li');
                     listItem.textContent = `${item[0]}: ${item[1]}`;
                     leaderboardList.appendChild(listItem);
+                });
+
+                data[1].forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item[0]}: ${item[1]}`;
+                    leaderboardHardList.appendChild(listItem);
                 });
 
                 leaderboard.classList.remove('hidden');
@@ -263,13 +285,21 @@ function setName() {
                 fetch('/get-leaderboard')
                     .then(response => response.json())
                     .then(data => {
-                        const leaderboardList = document.getElementById('leaderboard').querySelector('ul');
+                        const leaderboardList = document.getElementById('leaderboardList');
+                        const leaderboardHardList = document.getElementById('leaderboardListHard');
                         leaderboardList.innerHTML = ''; // Clear the current leaderboard
+                        leaderboardHardList.innerHTML = ''; // Clear the current leaderboard
 
-                        data.forEach(item => {
+                        data[0].forEach(item => {
                             const listItem = document.createElement('li');
                             listItem.textContent = `${item[0]}: ${item[1]}`;
                             leaderboardList.appendChild(listItem);
+                        });
+
+                        data[1].forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = `${item[0]}: ${item[1]}`;
+                            leaderboardHardList.appendChild(listItem);
                         });
 
                         document.getElementById('leaderboard').classList.remove('hidden');

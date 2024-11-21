@@ -226,7 +226,7 @@ def generate_unique_session_id(ip_address):
         new_id = ''.join(secrets.choice(characters) for _ in range(32))
         if not is_id_in_file(new_id):
             with open('ids.txt', 'a') as f:
-                f.write(f"{new_id},User-{new_id},{ip_address},0\n")
+                f.write(f"{new_id},User-{new_id},{ip_address},0,0\n")
             return new_id
 
 def is_id_in_file(id_to_check):
@@ -259,12 +259,12 @@ def get_session_data_by_ip(ip_address):
     try:
         with open('ids.txt', 'r') as file:
             for line in file:
-                session_id, username, ip, highest_streak = line.strip().split(',')
+                session_id, username, ip, highest_streak, highest_streak_hard = line.strip().split(',')
                 if ip == ip_address:
-                    return session_id, username, int(highest_streak)
+                    return session_id, username, int(highest_streak), int(highest_streak_hard)
     except FileNotFoundError:
         pass
-    return None, None, 0
+    return None, None, 0, 0
 
 def get_highest_streak_by_session_id(session_id):
     try:
@@ -344,8 +344,8 @@ def getTeams():
         "id": idTeams,"illinois": ilTeams, "il": ilTeams,"iowa": iaTeams, "ia": iaTeams,"kansas": ksTeams, "ks": ksTeams,"kentucky": kyTeams, "ky": kyTeams,"louisiana": laTeams, "la": laTeams,"minnesota": mnTeams, "mn": mnTeams,"mississippi": msTeams, "ms": msTeams,"missouri": moTeams, "mo": moTeams,
         "montana": mtTeams, "mt": mtTeams,"nebraska": RneTeams, "ne": RneTeams,"nevada": nvTeams, "nv": nvTeams,"new mexico": nmTeams, "nm": nmTeams,"new york": nyTeams, "ny": nyTeams,"north dakota": ndTeams, "nd": ndTeams,"ohio": ohTeams, "oh": ohTeams,"oklahoma": okTeams, "ok": okTeams,
         "pennsylvania": paTeams, "pa": paTeams,"south dakota": sdTeams, "sd": sdTeams,"tennessee": tnTeams, "tn": tnTeams,"utah": utTeams, "ut": utTeams,"west virginia": wvTeams, "wv": wvTeams,"wisconsin": wiTeams, "wi": wiTeams,"wyoming": wyTeams, "wy": wyTeams,"puerto rico": prTeams, "pr": prTeams,
-        "guam": guTeams,"texas": fitTeams, "tx": fitTeams,"new jersey": fmaTeams, "nj": fmaTeams,"delaware": fmaTeams, "de": fmaTeams,"massachusetts": neTeams, "ma": neTeams,"vermont": neTeams, "vt": neTeams,"rhode island": neTeams, "ri": neTeams,"maine": neTeams, "me": neTeams,"maryland": neTeams, 
-        "md": neTeams,"new hampshire": neTeams, "nh": neTeams,"connecticut": neTeams, "ct": neTeams,"michigan": fimTeams, "mi": fimTeams,"georgia": pchTeams, "ga": pchTeams,"south carolina": pchTeams, "sc": pchTeams,"north carolina": fncTeams, "nc": fncTeams,"oregon": pnwTeams, "or": pnwTeams,
+        "guam": guTeams,"texas": fitTeams, "tx": fitTeams,"new jersey": fmaTeams, "nj": fmaTeams,"delaware": fmaTeams, "de": fmaTeams,"massachusetts": neTeams, "ma": neTeams,"vermont": neTeams, "vt": neTeams,"rhode island": neTeams, "ri": neTeams,"maine": neTeams, "me": neTeams,"maryland": chsTeams, 
+        "md": chsTeams,"new hampshire": neTeams, "nh": neTeams,"connecticut": neTeams, "ct": neTeams,"michigan": fimTeams, "mi": fimTeams,"georgia": pchTeams, "ga": pchTeams,"south carolina": pchTeams, "sc": pchTeams,"north carolina": fncTeams, "nc": fncTeams,"oregon": pnwTeams, "or": pnwTeams,
         "washington": pnwTeams, "wa": pnwTeams,"indiana": finTeams, "in": finTeams,"virginia": chsTeams, "va": chsTeams,"israel": isrTeams,"turkey": turTeams, "türkiye": turTeams,"china": chiTeams, "cn": chiTeams,"chinese taipei": taiTeams, "taiwan": taiTeams,"australia": ausTeams,"canada": canTeams,
         "united kingdom": ukTeams, "uk": ukTeams, "kingdom": ukTeams,"belize": belTeams,"ukraine": ukrTeams,"federated states of micronesia": micTeams,"kazakhstan": kazTeams,"czech republic": czeTeams,"gambia": gamTeams,"philippines": phiTeams,"pakistan": pakTeams,"comoros": comTeams,"serbia": serTeams,"suriname": surTeams,
         "ecuador": ecuTeams,"botswana": botTeams,"france": fraTeams,"sweden": sweTeams,"azerbaijan": azeTeams,"romania": romTeams,"argentina": argTeams,"india": indTeams,"dominican republic": domTeams,"greece": greTeams,"bulgaria": bulTeams,"poland": polTeams,"netherlands": netTeams,
@@ -373,19 +373,36 @@ def getTeams():
 
 def checkHighScores():
     leaderboard = []
+    leaderboard_hard = []
+
+    leaderboardHardFile = 'leaderboards_hard.txt'
+    leaderboardFile = 'leaderboards.txt'
 
     # Read the leaderboard from the file
     try:
-        with open('leaderboards.txt', 'r') as file:
+        with open(leaderboardFile, 'r') as file:
             for line in file:
                 if line.strip():  # Check if the line is not empty
                     session_id, score = line.strip().split(',')
                     leaderboard.append((session_id, int(score)))
     except FileNotFoundError:
         # Handle the case where the file does not exist
-        open('leaderboards.txt', 'w').close()  # Create an empty file
+        open(leaderboardFile, 'w').close()  # Create an empty file
+
+    try:
+        with open(leaderboardHardFile, 'r') as file:
+            for line in file:
+                if line.strip():  # Check if the line is not empty
+                    session_id, score = line.strip().split(',')
+                    leaderboard_hard.append((session_id, int(score)))
+    except FileNotFoundError:
+        # Handle the case where the file does not exist
+        open(leaderboardHardFile, 'w').close()  # Create an empty file
+
+
 
     # Sort the leaderboard by score in descending order and keep the top 10
+    leaderboard_hard = sorted(leaderboard_hard, key=lambda x: x[1], reverse=True)[:10]
     leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
     # Check if the session's ID is already in the leaderboard
@@ -401,9 +418,23 @@ def checkHighScores():
             leaderboard.append((session_id, session['highest_streak']))
             leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
 
+        for i, (sid, score) in enumerate(leaderboard_hard):
+            if sid == session_id:
+                # Update the score if the session's ID is already in the leaderboard
+                leaderboard_hard[i] = (sid, max(score, session['highest_streak_hard']))
+                break
+        else:
+            # Add the session's ID to the leaderboard if it's not already there
+            leaderboard_hard.append((session_id, session['highest_streak_hard']))
+            leaderboard_hard = sorted(leaderboard_hard, key=lambda x: x[1], reverse=True)[:10]
+
     # Write the updated leaderboard back to the file
-    with open('leaderboards.txt', 'w') as file:
+    with open(leaderboardFile, 'w') as file:
         for sid, score in leaderboard:
+            file.write(f"{sid},{score}\n")
+    
+    with open(leaderboardHardFile, 'w') as file:
+        for sid, score in leaderboard_hard:
             file.write(f"{sid},{score}\n")
 
     # Update the highest streak in ids.txt
@@ -418,13 +449,65 @@ def checkHighScores():
         for line in ids:
             if line.startswith(session_id):
                 parts = line.strip().split(',')
-                file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']}\n")
+                file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']},{session['highest_streak_hard']}\n")
             else:
                 file.write(line)
 
-    return leaderboard
+    return leaderboard, leaderboard_hard
 
+def updateFiles():
+        # Update ids.txt
+            session_id = session['id']
+            ids = []
+            try:
+                with open('ids.txt', 'r') as file:
+                    ids = file.readlines()
+            except FileNotFoundError:
+                pass
 
+            with open('ids.txt', 'w') as file:
+                for line in ids:
+                    if line.startswith(session_id):
+                        parts = line.strip().split(',')
+                        file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']},{session['highest_streak_hard']}\n")
+                    else:
+                        file.write(line)
+            
+            if (session['hard_mode']):
+                leaderboardFile = 'leaderboards_hard.txt'
+            else:
+                leaderboardFile = 'leaderboards.txt'
+
+            # Update leaderboards.txt or leaderboards_hard.txt
+            leaderboard = []
+            try:
+                with open(leaderboardFile, 'r') as file:
+                    for line in file:
+                        if line.strip():
+                            sid, score = line.strip().split(',')
+                            leaderboard.append((sid, int(score)))
+            except FileNotFoundError:
+                pass
+
+            leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+            for i, (sid, score) in enumerate(leaderboard):
+                if sid == session_id:
+                    if (session['hard_mode']):
+                        leaderboard[i] = (sid, session['highest_streak_hard'])
+                    else:
+                        leaderboard[i] = (sid, session['highest_streak'])
+                    break
+            else:
+                if (session['hard_mode']):
+                    leaderboard.append((session_id, session['highest_streak_hard']))
+                else:
+                    leaderboard.append((session_id, session['highest_streak']))
+                leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
+
+            with open(leaderboardFile, 'w') as file:
+                for sid, score in leaderboard:
+                    file.write(f"{sid},{score}\n")
 
 
 
@@ -434,14 +517,16 @@ def root():
         ip_address = request.remote_addr
 
         if 'id' not in session:
-            session_id, username, highest_streak = get_session_data_by_ip(ip_address)
+            session_id, username, highest_streak, highest_streak_hard = get_session_data_by_ip(ip_address)
             if session_id:
                 session['id'] = session_id
                 session['username'] = username
                 session['highest_streak'] = highest_streak
+                session['highest_streak_hard'] = highest_streak_hard
             else:
                 session['id'] = generate_unique_session_id(ip_address)
                 session['highest_streak'] = 0
+                session['highest_streak_hard'] = 0
         else:
             session_id = session['id']
             update_ip_address_if_changed(session_id, ip_address)
@@ -462,11 +547,13 @@ def root():
                 id_exists = True
                 if int(parts[3]) != session.get('highest_streak', 0):
                     session['highest_streak'] = int(parts[3])
+                if int(parts[4]) != session.get('highest_streak_hard', 0):
+                    session['highest_streak_hard'] = int(parts[4])
                 break
 
         if not id_exists:
             with open('ids.txt', 'a') as file:
-                file.write(f"{session_id},{session['username']},{ip_address},{session.get('highest_streak', 0)}\n")
+                file.write(f"{session_id},{session['username']},{ip_address},{session.get('highest_streak', 0)},{session.get('highest_streak_hard', 0)}\n")
 
 
         if 'dark_mode' not in session:
@@ -475,6 +562,8 @@ def root():
             session['hard_mode'] = False
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
+        if 'highest_streak_hard' not in session:
+            session['highest_streak_hard'] = 0
         if 'username' not in session:
             session['username'] = None
         
@@ -500,7 +589,7 @@ def root():
                                 'uaeTeams', 'ukTeams', 'ukrTeams', 'venTeams', 'vieTeams', 'zimTeams', 'zelTeams']
 
         genRandomTeam()
-        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
+        return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'],highest_streak_hard = session['highest_streak_hard'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
 
 @app.route('/script.js')
 def script():
@@ -514,6 +603,15 @@ def styleSecond():
 def dark_mode():
     session['dark_mode'] = not session.get('dark_mode', False)
     return "0"
+
+@app.route('/hard-mode')
+def hard_mode():
+    session['hard_mode'] = not session.get('hard_mode', False)
+    return "0"
+
+@app.route('/get-hard-mode')
+def is_hard_mode():
+    return jsonify({'hard_mode': session.get('hard_mode', False)})
 
 @app.route('/update-teams', methods=['POST'])
 def update_teams():
@@ -529,7 +627,7 @@ def update_teams():
 def gen_random_team_route():
     genRandomTeam()
 
-    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak']})
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'],'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak'],'highest_streak': session['highest_streak'],'highest_streak_hard': session['highest_streak_hard']})
 
 @app.route('/set-username', methods=['POST'])
 def set_username():
@@ -554,7 +652,7 @@ def set_username():
         for line in ids:
             if line.startswith(session_id):
                 parts = line.strip().split(',')
-                file.write(f"{session_id},{new_name},{parts[2]},{session['highest_streak']}\n")
+                file.write(f"{session_id},{new_name},{parts[2]},{session['highest_streak']},{session['highest_streak_hard']}\n")
             else:
                 file.write(line)
 
@@ -579,66 +677,37 @@ def check_team():
             session['guessedTeams'] = []
             checkHighScores()
 
-        if session['currentStreak'] > session['highest_streak']:
-            session['highest_streak'] = session['currentStreak']
+        if session['hard_mode']:
+            if session['currentStreak'] > session['highest_streak_hard']:
+                session['highest_streak_hard'] = session['currentStreak']
+                updateFiles()
+        else:
+            if session['currentStreak'] > session['highest_streak']:
+                session['highest_streak'] = session['currentStreak']
+                updateFiles()
 
-            # Update ids.txt
-            session_id = session['id']
-            ids = []
-            try:
-                with open('ids.txt', 'r') as file:
-                    ids = file.readlines()
-            except FileNotFoundError:
-                pass
-
-            with open('ids.txt', 'w') as file:
-                for line in ids:
-                    if line.startswith(session_id):
-                        parts = line.strip().split(',')
-                        file.write(f"{session_id},{parts[1]},{parts[2]},{session['highest_streak']}\n")
-                    else:
-                        file.write(line)
             
-            # Update leaderboards.txt
-            leaderboard = []
-            try:
-                with open('leaderboards.txt', 'r') as file:
-                    for line in file:
-                        if line.strip():
-                            sid, score = line.strip().split(',')
-                            leaderboard.append((sid, int(score)))
-            except FileNotFoundError:
-                pass
-
-            leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
-
-            for i, (sid, score) in enumerate(leaderboard):
-                if sid == session_id:
-                    leaderboard[i] = (sid, session['highest_streak'])
-                    break
-            else:
-                leaderboard.append((session_id, session['highest_streak']))
-                leaderboard = sorted(leaderboard, key=lambda x: x[1], reverse=True)[:10]
-
-            with open('leaderboards.txt', 'w') as file:
-                for sid, score in leaderboard:
-                    file.write(f"{sid},{score}\n")
         
         correctTeamName = session.get('curTeamName',0)
         correctTeamNumber = session.get('curTeam',0)
         genRandomTeam()
-        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamInfo': session.get('curTeamInfo', "No Info"),'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0)})
+        return jsonify({'match': match, 'correctTeamNumber': correctTeamNumber,'correctTeamName': correctTeamName, 'newTeamName': session.get('curTeamName', "Teams Not Loaded Yet"), 'newTeamInfo': session.get('curTeamInfo', "No Info"),'newTeamCity': session.get('curTeamCity', "No City"), 'newTeamState': session.get('curTeamState', "No State"), 'newTeamCountry': session.get('curTeamCountry', "No Country"), 'streak': session.get('currentStreak', 0),'highest_streak': session.get('highest_streak', 0),'highest_streak_hard': session.get('highest_streak_hard', 0)})
 
 @app.route('/get-leaderboard', methods=['GET'])
 def get_leaderboard():
-    leaderboard = checkHighScores()
+    leaderboard, leaderboardHard = checkHighScores()
     leaderboard_with_names = []
+    hard_leaderboard_with_names = []
 
     for session_id, score in leaderboard:
         username = get_username_by_session_id(session_id)
         leaderboard_with_names.append((username, score))
 
-    return jsonify(leaderboard_with_names)
+    for session_id, score in leaderboardHard:
+        username = get_username_by_session_id(session_id)
+        hard_leaderboard_with_names.append((username, score))
+    
+    return jsonify(leaderboard_with_names,hard_leaderboard_with_names)
 
 if __name__ == '__main__':
     getTeams()

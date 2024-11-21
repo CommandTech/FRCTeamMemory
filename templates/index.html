@@ -54,14 +54,14 @@
         </div>
 
         <div class="form-container" id="first-page">
-            <h1 class="team-name" id="team-name">{{team}}</h1>
+            <h1 class="team-name" id="team-name">{{'' if hard_mode else team}}</h1>
             <h2 class="team-info" id="team-info">{{info}}</h1>
             <h3 class="team-location" id="team-location">{{city}}, {{state}}, {{country}}</h3>
             <div class="centered-content">
                 <input type="text" id="team-input" placeholder="12345" maxlength="5" pattern=".{0,5}" min ="0">
                 <button type="submit" id="submit-button">Submit</button>
                 <label id ="streak">Streak: 0</label>
-                <label id ="highestStreak">Highest Streak: {{highest_streak}}</label>
+                <label id="highestStreak">Highest Streak: {{ highest_streak_hard if hard_mode else highest_streak }}</label>
             </div>
         </div>
 
@@ -69,10 +69,12 @@
 
         <button id="leaderboardButton" class="crown-icon"><i class="fas fa-crown"></i></button>
         <div class="leaderboard hidden" id="leaderboard">
-            <h2>Leaderboard</h2>
             <input type="text" id="username-input" placeholder="Username">
             <button type="submit" id="submit-username">Ok</button>
-            <ul></ul>
+            <h2>Leaderboard</h2>
+            <ul id="leaderboardList"></ul>
+            <h2>Hard Mode Leaderboard</h2>
+            <ul id="leaderboardListHard"></ul>
         </div>
     </div>
     <script src="script.js"></script>
