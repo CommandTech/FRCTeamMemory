@@ -1,0 +1,6 @@
+flask.crt
+flask.key
+flask.csr
+rootCA.key
+rootCA.pem
+rootCA.srl

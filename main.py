@@ -286,7 +286,7 @@ def get_username_by_session_id(session_id):
     return 'Unknown'
 
 def startWeb():
-    app.run(host='0.0.0.0', port=81)
+    app.run(host='0.0.0.0', port=443, ssl_context=('flask.crt', 'flask.key'))
 
 def get_username_by_session_id(session_id):
     try:
