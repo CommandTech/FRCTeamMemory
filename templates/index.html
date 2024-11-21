@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRC Memory</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css',_external=True,_scheme='https') }}">
 </head>
 <body class="{{ 'dark-mode' if dark_mode else '' }}">
     <div class="switch-container">
@@ -67,7 +66,7 @@
 
         <button id="filterButton"class="hamburger-icon">&#9776;</button>
 
-        <button id="leaderboardButton" class="crown-icon"><i class="fas fa-crown"></i></button>
+        <button id="leaderboardButton">Leaderboard</button>
         <div class="leaderboard hidden" id="leaderboard">
             <input type="text" id="username-input" placeholder="Username">
             <button type="submit" id="submit-username">Ok</button>
@@ -77,6 +76,6 @@
             <ul id="leaderboardListHard"></ul>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="https://localhost/static/script.js"></script>
 </body>
 </html>

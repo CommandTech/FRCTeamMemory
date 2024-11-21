@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         isSubmitting = true;
         const teamNumber = textBox.value;
 
-        fetch('/check-team', {
+        fetch('https://localhost/check-team', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             .map(cb => cb.id);
 
 
-        fetch('/update-teams', {
+        fetch('https://localhost/update-teams', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function reloadPage() {
-    fetch('/gen-random-team', {
+    fetch('https://localhost/gen-random-team', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -188,13 +188,13 @@ function reloadPage() {
 }
 
 document.getElementById('darkModeSwitch').addEventListener('change', function() {
-    fetch('/dark-mode');
+    fetch('https://localhost/dark-mode');
     document.body.classList.toggle('dark-mode');
 });
 
 document.getElementById('hardModeSwitch').addEventListener('change', function() {
     hardMode = !hardMode;
-    fetch('/hard-mode');
+    fetch('https://localhost/hard-mode');
     reloadPage();
 });
 
@@ -225,11 +225,9 @@ document.getElementById('leaderboardButton').addEventListener('click', function(
     var body = document.body;
 
     if (leaderboard.classList.contains('hidden')) {
-        fetch('/get-leaderboard')
+        fetch('https://localhost/get-leaderboard')
             .then(response => response.json())
             .then(data => {
-                console.log(data[0]);
-                console.log(data[1]);
                 // const leaderboardList = leaderboard.querySelector('ul');
                 const leaderboardList = document.getElementById('leaderboardList')
                 const leaderboardHardList = document.getElementById('leaderboardListHard')
@@ -266,7 +264,7 @@ function setName() {
     const newUsername = usernameInput.value.trim();
 
     if (newUsername) {
-        fetch('/set-username', {
+        fetch('https://localhost/set-username', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -282,7 +280,7 @@ function setName() {
                 usernameInput.value = "";
 
                 // Fetch and display the updated leaderboard
-                fetch('/get-leaderboard')
+                fetch('https://localhost/get-leaderboard')
                     .then(response => response.json())
                     .then(data => {
                         const leaderboardList = document.getElementById('leaderboardList');

@@ -221,27 +221,3 @@ body.dark-mode .leaderboard {
 body.dark-mode #filterButton {
     color: white; /* Change color to white in dark mode */
 }
-
-.crown-icon {
-    position: absolute;
-    top: 70px; /* Adjust this value to position the button */
-    right: 10px; /* Position the button 10px from the right */
-    padding: 10px; /* Adjust padding for the button */
-    font-size: 24px; /* Increase font size for the icon */
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #FFD700; /* Gold color for the crown */
-}
-
-.crown-icon i {
-    font-size: 34px; /* Adjust the size of the icon */
-}
-
-body.dark-mode .crown-icon {
-    color: #FFD700; /* Ensure the crown remains gold in dark mode */
-}
-
-body.dark-mode #leaderboardButton {
-    background-color: #1d1d1d; /* Change color to white in dark mode */
-}

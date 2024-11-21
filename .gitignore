@@ -4,3 +4,4 @@ flask.csr
 rootCA.key
 rootCA.pem
 rootCA.srl
+openssl.cnf

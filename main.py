@@ -7,8 +7,10 @@ from datetime import timedelta
 import secrets
 import string
 import re
+from flask_talisman import Talisman
 
 app = Flask(__name__, static_folder='static')
+Talisman(app, force_https=True)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
