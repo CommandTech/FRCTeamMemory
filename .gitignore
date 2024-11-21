@@ -5,3 +5,4 @@ rootCA.key
 rootCA.pem
 rootCA.srl
 openssl.cnf
+certificatecommands.txt
