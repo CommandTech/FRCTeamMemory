@@ -6,3 +6,5 @@ rootCA.pem
 rootCA.srl
 openssl.cnf
 certificatecommands.txt
+cert.pem
+key.pem

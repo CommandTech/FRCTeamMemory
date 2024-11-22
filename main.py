@@ -608,6 +608,7 @@ def dark_mode():
 
 @app.route('/hard-mode')
 def hard_mode():
+    session['currentStreak'] = 0
     session['hard_mode'] = not session.get('hard_mode', False)
     return "0"
 
