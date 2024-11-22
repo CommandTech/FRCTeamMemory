@@ -212,6 +212,9 @@ def genRandomTeam():
 
             if re.search(r'team \d{1,4}', session['curTeamInfo'].lower()):
                 session['curTeamInfo'] = "No Info"
+            
+            print(session['curTeam'])
+            print(session['curTeamName'])
                 
         except:
             print("excepted")
@@ -288,7 +291,7 @@ def get_username_by_session_id(session_id):
     return 'Unknown'
 
 def startWeb():
-    app.run(host='0.0.0.0', port=443, ssl_context=('cert.pem', 'key.pem'))
+    app.run(host='0.0.0.0', port=81, ssl_context=('cert.pem', 'key.pem'))
 
 def get_username_by_session_id(session_id):
     try:
@@ -663,6 +666,8 @@ def set_username():
 
 @app.route('/check-team', methods=['POST'])
 def check_team():
+    print(session['curTeam'])
+    print(session['curTeamName'])
     data = request.get_json()
     try:
         teamNumber = int(data['teamNumber'])

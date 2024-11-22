@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         isSubmitting = true;
         const teamNumber = textBox.value;
 
-        fetch('https://localhost/check-team', {
+        fetch('/check-team', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             .map(cb => cb.id);
 
 
-        fetch('https://localhost/update-teams', {
+        fetch('/update-teams', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             })
         })
         .then(response => response.json())
+        .then
         .then(data => {
             reloadPage();
         })
@@ -158,7 +159,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function reloadPage() {
-    fetch('https://localhost/gen-random-team', {
+    fetch('/gen-random-team', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -167,6 +168,7 @@ function reloadPage() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
+            console.log('test');
             if (hardMode) {
                 teamName.textContent = "";
                 highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
@@ -188,13 +190,13 @@ function reloadPage() {
 }
 
 document.getElementById('darkModeSwitch').addEventListener('change', function() {
-    fetch('https://localhost/dark-mode');
+    fetch('/dark-mode');
     document.body.classList.toggle('dark-mode');
 });
 
 document.getElementById('hardModeSwitch').addEventListener('change', function() {
     hardMode = !hardMode;
-    fetch('https://localhost/hard-mode');
+    fetch('/hard-mode');
     reloadPage();
 });
 
@@ -225,7 +227,7 @@ document.getElementById('leaderboardButton').addEventListener('click', function(
     var body = document.body;
 
     if (leaderboard.classList.contains('hidden')) {
-        fetch('https://localhost/get-leaderboard')
+        fetch('/get-leaderboard')
             .then(response => response.json())
             .then(data => {
                 // const leaderboardList = leaderboard.querySelector('ul');
@@ -264,7 +266,7 @@ function setName() {
     const newUsername = usernameInput.value.trim();
 
     if (newUsername) {
-        fetch('https://localhost/set-username', {
+        fetch('/set-username', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -280,7 +282,7 @@ function setName() {
                 usernameInput.value = "";
 
                 // Fetch and display the updated leaderboard
-                fetch('https://localhost/get-leaderboard')
+                fetch('/get-leaderboard')
                     .then(response => response.json())
                     .then(data => {
                         const leaderboardList = document.getElementById('leaderboardList');

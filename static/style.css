@@ -176,7 +176,7 @@ input:checked + .slider:before {
 
 #leaderboardButton {
     position: absolute;
-    top: 50px; /* Position the button 10px from the bottom */
+    top: 170px; /* Position the button 10px from the bottom */
     right: 10px; /* Position the button 10px from the right */
     padding: 5px 10px; /* Reduce padding for smaller button */
     font-size: 1em; /* Reduce font size for smaller button */
