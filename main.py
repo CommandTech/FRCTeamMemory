@@ -212,9 +212,6 @@ def genRandomTeam():
 
             if re.search(r'team \d{1,4}', session['curTeamInfo'].lower()):
                 session['curTeamInfo'] = "No Info"
-            
-            print(session['curTeam'])
-            print(session['curTeamName'])
                 
         except:
             print("excepted")
@@ -563,8 +560,8 @@ def root():
 
         if 'dark_mode' not in session:
             session['dark_mode'] = False
-        if 'hard_mode' not in session:
-            session['hard_mode'] = False
+        # if 'hard_mode' not in session:
+        session['hard_mode'] = False
         if 'highest_streak' not in session:
             session['highest_streak'] = 0
         if 'highest_streak_hard' not in session:
@@ -613,7 +610,8 @@ def dark_mode():
 def hard_mode():
     session['currentStreak'] = 0
     session['hard_mode'] = not session.get('hard_mode', False)
-    return "0"
+    genRandomTeam()
+    return jsonify({'status': 'success', 'newTeamName': session['curTeamName'], 'newTeamInfo': session['curTeamInfo'], 'newTeamCity': session['curTeamCity'], 'newTeamState': session['curTeamState'], 'newTeamCountry': session['curTeamCountry'], 'streak': session['currentStreak'], 'highest_streak': session['highest_streak'], 'highest_streak_hard': session['highest_streak_hard']})
 
 @app.route('/get-hard-mode')
 def is_hard_mode():
@@ -666,8 +664,6 @@ def set_username():
 
 @app.route('/check-team', methods=['POST'])
 def check_team():
-    print(session['curTeam'])
-    print(session['curTeamName'])
     data = request.get_json()
     try:
         teamNumber = int(data['teamNumber'])

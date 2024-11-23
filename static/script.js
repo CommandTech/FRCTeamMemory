@@ -168,7 +168,6 @@ function reloadPage() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            console.log('test');
             if (hardMode) {
                 teamName.textContent = "";
                 highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
@@ -196,8 +195,28 @@ document.getElementById('darkModeSwitch').addEventListener('change', function() 
 
 document.getElementById('hardModeSwitch').addEventListener('change', function() {
     hardMode = !hardMode;
-    fetch('/hard-mode');
-    reloadPage();
+    fetch('/hard-mode')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (hardMode) {
+                    teamName.textContent = "";
+                    highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
+                }else{
+                    teamName.textContent = data.newTeamName;
+                    if (hardMode){
+                        highestStreak.textContent = "Highest Streak: " + data.highest_streak_hard;
+                    }else{
+                        highestStreak.textContent = "Highest Streak: " + data.highest_streak;
+                    }
+                }
+                currentStreak.textContent = "Streak: " + data.streak;
+                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
+    
+                teamInfo.textContent = data.newTeamInfo;
+            }
+        })
+        .catch(error => console.error('Error:', error));
 });
 
 document.getElementById('team-input').addEventListener('input', function (e) {
