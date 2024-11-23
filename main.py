@@ -513,11 +513,17 @@ def updateFiles():
 
 
 
+
 @app.route('/')
 def root():
     with app.app_context():
         ip_address = request.remote_addr
 
+        with open('banned.txt', 'r') as file:
+            banned_ips = [line.strip() for line in file.readlines()]
+            if ip_address in banned_ips:
+                return "Page not found."
+            
         if 'id' not in session:
             session_id, username, highest_streak, highest_streak_hard = get_session_data_by_ip(ip_address)
             if session_id:
@@ -533,7 +539,7 @@ def root():
             session_id = session['id']
             update_ip_address_if_changed(session_id, ip_address)
 
-                # Always check the ids.txt file for the session ID
+        # Always check the ids.txt file for the session ID
         session_id = session['id']
         ids = []
         try:
@@ -592,6 +598,13 @@ def root():
 
         genRandomTeam()
         return render_template('index.html', dark_mode=session.get('dark_mode', False), hard_mode=session.get('hard_mode', False), highest_streak = session['highest_streak'],highest_streak_hard = session['highest_streak_hard'], team=session['curTeamName'], info=session.get('curTeamInfo','No Info'), selected_regions=session.get('selected_regions', []), regional=session.get('regional', []), team_name_mapping=team_name_mapping, city=session.get('curTeamCity', "No City"), state=session.get('curTeamState', "No State"), country=session.get('curTeamCountry', "No Country"))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    ip_address = request.remote_addr
+    with open('banned.txt', 'a') as file:
+        file.write(f"{ip_address}\n")
+    return "Page not found.", 404
 
 @app.route('/script.js')
 def script():

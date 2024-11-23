@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 }
                 teamName.style.color = prevColor;
 
-                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
-                teamInfo.textContent = data.newTeamInfo;
+                teamLocation.textContent = (data.newTeamCity + ', ' || '') + (data.newTeamState + ', ' || '') + (data.newTeamCountry || '');
+                teamInfo.textContent = (data.newTeamInfo || 'No Info');
 
                 isSubmitting = false;
             }, 2000); // 2000 milliseconds = 2 seconds
@@ -180,9 +180,9 @@ function reloadPage() {
                 }
             }
             currentStreak.textContent = "Streak: " + data.streak;
-            teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
+            teamLocation.textContent = (data.newTeamCity + ', ' || '') + (data.newTeamState + ', ' || '') + (data.newTeamCountry || '');
 
-            teamInfo.textContent = data.newTeamInfo;
+            teamInfo.textContent = (data.newTeamInfo || 'No Info');
         }
     })
     .catch(error => console.error('Error:', error));
@@ -211,9 +211,9 @@ document.getElementById('hardModeSwitch').addEventListener('change', function() 
                     }
                 }
                 currentStreak.textContent = "Streak: " + data.streak;
-                teamLocation.textContent = data.newTeamCity + ', ' + data.newTeamState + ', ' + data.newTeamCountry;
+                teamLocation.textContent = (data.newTeamCity + ', ' || '') + (data.newTeamState + ', ' || '') + (data.newTeamCountry || '');
     
-                teamInfo.textContent = data.newTeamInfo;
+                teamInfo.textContent = (data.newTeamInfo || 'No Info');
             }
         })
         .catch(error => console.error('Error:', error));
